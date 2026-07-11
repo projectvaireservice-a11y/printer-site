@@ -205,7 +205,14 @@ async function submitRequest() {
                 body: new URLSearchParams({
                     chat_id: TELEGRAM_CHAT_ID,
                     text: message,
-                    parse_mode: 'Markdown'
+                    parse_mode: 'Markdown',
+                    reply_markup: JSON.stringify({
+                        inline_keyboard: [
+                            [
+                                { text: "✅ Выполнено", callback_data: "complete_order" }
+                            ]
+                        ]
+                    })
                 })
             }
         );
