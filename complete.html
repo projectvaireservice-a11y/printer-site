@@ -30,7 +30,7 @@
     async function completeOrder() {
       if (!printerId) return;
 
-      // 1. Обновляем БД Supabase
+      // 1. Обновляем статус принтера в Supabase на "Выполнено"
       try {
         await fetch(`${SUPABASE_URL}/rest/v1/printers?id=eq.${encodeURIComponent(printerId)}`, {
           method: 'PATCH',
@@ -45,12 +45,12 @@
         console.error("Supabase update error:", e);
       }
 
-      // 2. Успешный экран
+      // 2. Отображаем успех на экране
       document.getElementById('icon').innerText = "✅";
       document.getElementById('title').innerText = "Заявка выполнена!";
       document.getElementById('desc').innerText = "Возвращаемся в Telegram...";
 
-      // 3. Возврат в ТГ (закрываем страницу или возвращаем назад)
+      // 3. Возвращаем мастера обратно в Telegram
       setTimeout(() => {
         window.close();
         if (!window.closed) {
