@@ -200,7 +200,18 @@ async function submitRequest() {
     }
 
     try {
-        const telegramResponse = await fetch(
+        await fetch(`${SUPABASE_BASE_URL}/rest/v1/printers?id=eq.${printerId}`, {
+            method: 'PATCH',
+            headers: {
+                'apikey': SUPABASE_ANON_KEY,
+                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                'Content-Type': 'application/json',
+                'Prefer': 'return=minimal'
+            },
+            body: JSON.stringify({ status: 'Заявка отправлена' })
+        });
+
+        const response = await fetch(
             `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
             {
                 method: 'POST',
@@ -212,18 +223,16 @@ async function submitRequest() {
             }
         );
 
-        let telegramOk = telegramResponse.type === 'opaque';
-        let sentMessageId = null;
-        if (!telegramOk) {
-            const telegramData = await telegramResponse.json();
-            telegramOk = telegramData.ok === true;
-            if (!telegramOk) {
-                throw new Error(telegramData.description || 'Ошибка Telegram API');
+        let messageId = null;
+        if (response.type !== 'opaque') {
+            const res = await response.json();
+            if (res.ok !== true) {
+                throw new Error(res.description || 'Ошибка Telegram API');
             }
-            sentMessageId = telegramData.result?.message_id;
+            messageId = res.result.message_id;
         }
 
-        if (sentMessageId) {
+        if (messageId) {
             const replyMarkupResponse = await fetch(
                 `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/editMessageReplyMarkup`,
                 {
@@ -231,11 +240,11 @@ async function submitRequest() {
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams({
                         chat_id: TELEGRAM_CHAT_ID,
-                        message_id: sentMessageId,
+                        message_id: messageId,
                         reply_markup: JSON.stringify({
                             inline_keyboard: [
                                 [
-                                    { text: "✅ Отметить выполненной", url: `https://printer-site-psi.vercel.app/complete.html?id=${printerId}&msg_id=${sentMessageId}` }
+                                    { text: "✅ Отметить выполненной", url: `https://printer-site-psi.vercel.app/complete.html?id=${printerId}&msg_id=${messageId}` }
                                 ]
                             ]
                         })
@@ -248,17 +257,6 @@ async function submitRequest() {
                 throw new Error(replyMarkupData.description || 'Ошибка добавления кнопки Telegram');
             }
         }
-
-        await fetch(`${SUPABASE_BASE_URL}/rest/v1/printers?id=eq.${printerId}`, {
-            method: 'PATCH',
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({ status: 'Заявка отправлена' })
-        });
 
         currentPrinterData.status = 'Заявка отправлена';
         if (infoText) {
