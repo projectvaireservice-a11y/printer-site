@@ -188,7 +188,8 @@ async function submitRequest() {
         `• *Адрес:* ${escapeTelegramMarkdown(address)}`,
         `• *Ответственный:* ${escapeTelegramMarkdown(name)}`,
         `• *Проблема:* ${escapeTelegramMarkdown(problemType)}`,
-        `• *Комментарий:* ${escapeTelegramMarkdown(comment)}`
+        `• *Комментарий:* ${escapeTelegramMarkdown(comment)}`,
+        '• Статус: 🔴 В работе'
     ].join('\n');
 
     if (submitBtn) {
@@ -209,7 +210,7 @@ async function submitRequest() {
                     reply_markup: JSON.stringify({
                         inline_keyboard: [
                             [
-                                { text: "✅ Выполнено", callback_data: "complete_order" }
+                                { text: "➡️ Завершить заявку", callback_data: "finish_order" }
                             ]
                         ]
                     })
