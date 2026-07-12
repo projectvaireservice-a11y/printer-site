@@ -17,37 +17,40 @@ if (orderForm) {
         e.preventDefault();
 
         const nameInput = document.getElementById('nameInput');
-        const modelInput = document.getElementById('modelInput');
-        const addressInput = document.getElementById('addressInput');
+    const modelInput = document.getElementById('modelInput');
+    const addressInput = document.getElementById('addressInput');
+    const cartridgeInput = document.getElementById('cartridgeInput');
 
-        const name = nameInput ? nameInput.value.trim() : '';
-        const model = modelInput ? modelInput.value.trim() : '';
-        const address = addressInput ? addressInput.value.trim() : '';
-        const textId = 'PR-' + Math.floor(100 + Math.random() * 900);
+    const name = nameInput ? nameInput.value.trim() : '';
+    const model = modelInput ? modelInput.value.trim() : '';
+    const address = addressInput ? addressInput.value.trim() : '';
+    const cartridge = cartridgeInput ? cartridgeInput.value.trim() : '';
+    const textId = 'PR-' + Math.floor(100 + Math.random() * 900);
 
-        const submitBtn = orderForm.querySelector('button[type="submit"]');
-        if (submitBtn) {
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Сохраняем…';
-        }
+    const submitBtn = orderForm.querySelector('button[type="submit"]');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Сохраняем...';
+    }
 
-        try {
-            const response = await fetch(`${SUPABASE_BASE_URL}/rest/v1/printers`, {
-                method: 'POST',
-                headers: {
-                    'apikey': SUPABASE_ANON_KEY,
-                    'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                    'Content-Type': 'application/json',
-                    'Prefer': 'return=minimal'
-                },
-                body: JSON.stringify({
-                    id: textId,
-                    model: model,
-                    address: address,
-                    status: 'Новый',
-                    name: name
-                })
-            });
+    try {
+      const response = await fetch(`${SUPABASE_BASE_URL}/rest/v1/printers`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_ANON_KEY,
+          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({
+          id: textId,
+          model: model,
+          address: address,
+          status: 'Новый',
+          name: name,
+          cartridge_number: cartridge
+        })
+      });
 
             if (response.ok) {
                 const baseUrl = window.location.href.replace(/[^/]*$/, '').replace(/\/$/, '');
@@ -167,80 +170,86 @@ async function loadPrinterData() {
 
 // 3. ОТПРАВКА ЗАЯВКИ КЛИЕНТОМ (index.html)
 async function submitRequest() {
-    if (!currentPrinterId || !currentPrinterData) return;
+  if (!currentPrinterId || !currentPrinterData) return;
 
-    const submitBtn = document.getElementById('submit-btn');
-    const commentField = document.getElementById('comment');
-    const infoText = document.getElementById('info-text');
-    const activeTab = document.querySelector('.tab.active');
+  const submitBtn = document.getElementById('submit-btn');
+  const commentField = document.getElementById('comment');
+  const infoText = document.getElementById('info-text');
+  const activeTab = document.querySelector('.tab.active');
 
-    const problemType = activeTab ? activeTab.textContent.trim() : 'Не указана';
-    const comment = commentField ? commentField.value.trim() : '—';
-    const printerId = currentPrinterId;
-    const model = currentPrinterData.model || '—';
-    const address = currentPrinterData.address || '—';
-    const name = currentPrinterData.name || '—';
+  const visitDaySelect = document.getElementById('visitDay');
+  const visitTimeSelect = document.getElementById('visitTime');
 
-    const message = [
-        '🚨 Новая заявка на обслуживание!',
-        `• ID принтера: ${printerId}`,
-        `• Модель: ${model}`,
-        `• Адрес: ${address}`,
-        `• Ответственный: ${name}`,
-        `• Проблема: ${problemType}`,
-        `• Комментарий: ${comment}`
-    ].join('\n');
+  const problemType = activeTab ? activeTab.textContent.trim() : 'Не указана';
+  const comment = commentField ? commentField.value.trim() : '-';
+  const printerId = currentPrinterId;
+  const model = currentPrinterData.model || '-';
+  const cartridge = currentPrinterData.cartridge_number || 'Не указан';
+  const address = currentPrinterData.address || '-';
+  const name = currentPrinterData.name || '-';
 
+  const visitDay = visitDaySelect ? visitDaySelect.value : 'Сегодня';
+  const visitTime = visitTimeSelect ? visitTimeSelect.value : 'В течение дня';
+
+  const message = [
+    '🚨 Новая заявка на обслуживание!',
+    `• ID принтера: ${printerId}`,
+    `• Модель: ${model}`,
+    `• Картридж: ${cartridge}`,
+    `• Адрес: ${address}`,
+    `• Ответственный: ${name}`,
+    `• Проблема: ${problemType}`,
+    `• Комментарий: ${comment}`,
+    `• Удобное время: ${visitDay}, ${visitTime}`
+  ].join('\n');
+
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Отправляем...';
+  }
+
+  try {
+    await fetch(`${SUPABASE_BASE_URL}/rest/v1/printers?id=eq.${printerId}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=minimal'
+      },
+      body: JSON.stringify({ status: 'Заявка отправлена' })
+    });
+
+    await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({
+        chat_id: TELEGRAM_CHAT_ID,
+        text: message
+      })
+    });
+
+    currentPrinterData.status = 'Заявка отправлена';
+    if (infoText) {
+      const responsible = currentPrinterData.name || '-';
+      infoText.innerHTML = `
+        <span class="highlight">Модель:</span> ${currentPrinterData.model}<br>
+        <span class="highlight">Адрес:</span> ${currentPrinterData.address}<br>
+        <span class="highlight">Ответственный:</span> ${responsible}
+      `;
+    }
+
+    if (commentField) commentField.value = '';
+    alert('Заявка успешно отправлена! Мастер уже получил уведомление.');
+  } catch (error) {
+    console.error('Ошибка:', error);
+    alert('Не удалось отправить заявку. Попробуйте позже.');
+  } finally {
     if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Отправляем…';
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Отправить заявку';
     }
-
-    try {
-        await fetch(`${SUPABASE_BASE_URL}/rest/v1/printers?id=eq.${printerId}`, {
-            method: 'PATCH',
-            headers: {
-                'apikey': SUPABASE_ANON_KEY,
-                'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-                'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
-            },
-            body: JSON.stringify({ status: 'Заявка отправлена' })
-        });
-
-        await fetch(
-            `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`,
-            {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: new URLSearchParams({
-                    chat_id: TELEGRAM_CHAT_ID,
-                    text: message
-                })
-            }
-        );
-
-        currentPrinterData.status = 'Заявка отправлена';
-        if (infoText) {
-            const responsible = currentPrinterData.name || '—';
-            infoText.innerHTML = `
-                <span class="highlight">Модель:</span> ${currentPrinterData.model}<br>
-                <span class="highlight">Адрес:</span> ${currentPrinterData.address}<br>
-                <span class="highlight">Ответственный:</span> ${responsible} · <span class="highlight">Статус:</span> Заявка отправлена
-            `;
-        }
-
-        if (commentField) commentField.value = '';
-        alert('Заявка успешно отправлена! Мастер уже получил уведомление.');
-    } catch (error) {
-        console.error('Ошибка:', error);
-        alert('Не удалось отправить заявку. Попробуйте позже.');
-    } finally {
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            submitBtn.textContent = 'Отправить заявку';
-        }
-    }
+  }
 }
 
 document.addEventListener('click', (e) => {

@@ -317,6 +317,25 @@
           <label for="comment">Комментарий или удобное время</label>
           <textarea id="comment" placeholder="Например: после 18:00, звоните перед приездом…" rows="3"></textarea>
         </div>
+        <!-- Выбор удобного времени -->
+<div class="form-group" style="margin-top: 15px;">
+  <label style="font-weight: 600; display: block; margin-bottom: 8px;">⏰ Когда приехать мастеру?</label>
+  
+  <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+    <select id="visitDay" style="width: 50%; padding: 10px; border-radius: 10px; border: 1px solid #CBD5E1; background: #FFF;">
+      <option value="Сегодня">Сегодня</option>
+      <option value="Завтра">Завтра</option>
+      <option value="Послезавтра">Послезавтра</option>
+    </select>
+
+    <select id="visitTime" style="width: 50%; padding: 10px; border-radius: 10px; border: 1px solid #CBD5E1; background: #FFF;">
+      <option value="До 12:00">До 12:00</option>
+      <option value="12:00 - 15:00">12:00 – 15:00</option>
+      <option value="15:00 - 18:00">15:00 – 18:00</option>
+      <option value="В течение дня">В течение дня</option>
+    </select>
+  </div>
+</div>
 
         <button type="button" id="submit-btn" class="submit-btn">Отправить заявку</button>
       </div>
