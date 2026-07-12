@@ -52,6 +52,12 @@ async function requestRest(path, options = {}) {
 }
 
 async function sendTelegramRequest({ selectedPrinters, serviceType, visitTime, comment }) {
+  const address = selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.location_note
+    || selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.address
+    || selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.street
+    || clientData?.address
+    || clientData?.street
+    || "Не указан";
   const printerLines = selectedPrinters
     .map((printer) => `• ${escapeHtml(printer.model || "Модель не указана")} (${escapeHtml(printer.id)})`)
     .join("\n");
@@ -61,6 +67,7 @@ async function sendTelegramRequest({ selectedPrinters, serviceType, visitTime, c
     "",
     `<b>Клиент:</b> ${escapeHtml(clientData?.name || "Не указан")}`,
     `<b>Телефон:</b> ${escapeHtml(clientPhone)}`,
+    `<b>Адрес:</b> ${escapeHtml(address)}`,
     `<b>Услуга:</b> ${escapeHtml(serviceType)}`,
     `<b>Время:</b> ${escapeHtml(visitTime)}`,
     `<b>Комментарий:</b> ${escapeHtml(comment || "Без комментария")}`,
@@ -354,8 +361,8 @@ async function addPrinter() {
 
     if (result.error) throw result.error;
 
-    clientPrinters.unshift(result.data);
-    renderPrinters();
+    qrPrinterId = result.data.id;
+    await loadPrinters();
     closeModal();
   } catch (error) {
     console.error("Ошибка добавления принтера:", error);
