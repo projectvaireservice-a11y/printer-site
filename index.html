@@ -302,6 +302,84 @@
       line-height: 1.6;
     }
 
+    .services-card {
+      margin-top: 20px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 100%);
+      border: 1px solid rgba(226, 232, 240, 0.8);
+    }
+
+    .services-header {
+      text-align: center;
+      margin-bottom: 18px;
+    }
+
+    .services-header h2 {
+      color: var(--heading);
+      font-size: 1.0625rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .services-header p {
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      line-height: 1.5;
+    }
+
+    .services-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .service-item {
+      padding: 16px;
+      border-radius: 16px;
+      background: #FFFFFF;
+      border: 1px solid #E2E8F0;
+      box-shadow: 0 12px 28px rgba(15, 23, 42, 0.05);
+    }
+
+    .service-item h3 {
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .service-item p {
+      color: var(--text-secondary);
+      font-size: 0.8125rem;
+      line-height: 1.55;
+      margin-bottom: 14px;
+    }
+
+    .service-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 10px 14px;
+      border-radius: 10px;
+      background: var(--accent);
+      color: #FFFFFF;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-decoration: none;
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.16);
+      transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+    }
+
+    .service-link:hover {
+      background: var(--accent-hover);
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.22);
+    }
+
+    .service-link:active {
+      transform: scale(0.98);
+    }
+
     .hidden { display: none !important; }
 
     .footer-note {
@@ -377,6 +455,27 @@
         <div class="success-icon">✓</div>
         <h2>Заявка принята!</h2>
         <p>Мастер уже выезжает к вам.</p>
+      </div>
+
+      <div class="card services-card">
+        <div class="services-header">
+          <h2>🎁 Специальные предложения для клиентов VAIRE</h2>
+          <p>Для вас действует скидка 10% на все направления VAIRE GROUP!</p>
+        </div>
+
+        <div class="services-list">
+          <div class="service-item">
+            <h3>🖨 VAIRE Print (Типография)</h3>
+            <p>Визитки, листовки, баннеры, наклейки и полиграфия для вашего бизнеса.</p>
+            <a class="service-link" href="https://wa.me/" target="_blank" rel="noopener">Узнать подробнее</a>
+          </div>
+
+          <div class="service-item">
+            <h3>📢 VAIRE Promotion (Реклама)</h3>
+            <p>Промоутеры, раздача листовок и привлечение клиентов.</p>
+            <a class="service-link" href="https://wa.me/" target="_blank" rel="noopener">Узнать подробнее</a>
+          </div>
+        </div>
       </div>
     </div>
 
