@@ -65,17 +65,20 @@ async function sendTelegramRequest({ selectedPrinters, serviceType, visitTime, c
     .join("\n");
 
   const text = [
-    "<b>Новая заявка на обслуживание принтера</b>",
+    "🔴 <b>НОВАЯ ЗАЯВКА НА ОБСЛУЖИВАНИЕ</b>",
     "",
-    `<b>Клиент:</b> ${escapeHtml(clientData?.name || "Не указан")}`,
-    `<b>Телефон:</b> ${escapeHtml(clientPhone)}`,
-    `<b>Адрес:</b> ${escapeHtml(address)}`,
-    `<b>Услуга:</b> ${escapeHtml(serviceType)}`,
-    `<b>Время:</b> ${escapeHtml(visitTime)}`,
-    `<b>Комментарий:</b> ${escapeHtml(comment || "Без комментария")}`,
+    "👤 <b>Данные клиента:</b>",
+    `• Клиент: ${escapeHtml(clientData?.name || "Не указан")}`,
+    `• Телефон: ${escapeHtml(clientPhone)}`,
+    `• Адрес: ${escapeHtml(address)}`,
+    `• Услуга: ${escapeHtml(serviceType)}`,
+    `• Комментарий: ${escapeHtml(comment || "Без комментария")}`,
     "",
-    "<b>Принтеры:</b>",
-    printerLines
+    "🪛 <b>Выбранные принтеры:</b>",
+    printerLines,
+    "",
+    "⏰ <b>Желаемое время визита:</b>",
+    `${escapeHtml(visitTime)}`
   ].join("\n");
 
   const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
@@ -98,7 +101,7 @@ async function sendTelegramRequest({ selectedPrinters, serviceType, visitTime, c
 
 async function sendEmailNotification({ selectedPrinters, serviceType, visitTime, comment }) {
   try {
-    const BREVO_API_KEY = "xsmtpsib-1aa28a34a40fc965d154f20bfe689324c6bccf3968794eac30a030773d1f37b6-yStAQhwr8baVDP1Q";
+    const BREVO_API_KEY = "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";
     const EMAIL_RECIPIENT = "nikitastrumpro@gmail.com";
     
     const clientName = clientData?.name || "Не указан";
@@ -931,7 +934,87 @@ async function initGeneratorApp() {
   await loadPrintersWithHistory();
 }
 
+async function initQrApp() {
+  const form = document.getElementById("qrClientForm");
+  if (!form) return;
+
+  // Listen for service selection to update hidden input
+  document.querySelectorAll(".qr-service-text").forEach(el => {
+    el.addEventListener("click", () => {
+      const hiddenInput = document.getElementById("qrSelectedService");
+      if (hiddenInput) {
+        hiddenInput.value = el.textContent.trim();
+      }
+    });
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const btn = document.getElementById("qrSubmitBtn");
+    
+    const name = document.getElementById("qrName")?.value.trim();
+    const phone = document.getElementById("qrPhone")?.value.trim();
+    const address = document.getElementById("qrAddress")?.value.trim();
+    const serviceType = document.getElementById("qrSelectedService")?.value.trim() || "Заправка картриджа";
+    const visitTime = document.getElementById("qrTime")?.value.trim() || "В течение дня";
+    const comment = document.getElementById("qrComment")?.value.trim() || "";
+    
+    // Parse optional printer ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlPrinterId = urlParams.get("printer_id") || "С наклейки";
+
+    setBusy(btn, true, "Отправляем...", "Вызвать мастера");
+
+    // Temporarily overwrite globals used by Telegram and Email functions
+    clientData = { name: name, address: address };
+    clientPhone = phone;
+    
+    const selectedPrinters = [{
+      id: urlPrinterId,
+      model: "Принтер не указан",
+      location_note: address
+    }];
+
+    try {
+      await sendTelegramRequest({ selectedPrinters, serviceType, visitTime, comment });
+      await sendEmailNotification({ selectedPrinters, serviceType, visitTime, comment });
+
+      // Record in Supabase (Service History) if possible
+      try {
+        if (!supabaseClient && window.supabase) {
+          supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+        }
+        if (supabaseClient) {
+          await supabaseClient.from("service_history").insert({
+            printer_id: urlPrinterId,
+            phone: phone,
+            service_type: serviceType,
+            problem_description: comment || serviceType,
+            visit_time: visitTime,
+            comment: comment
+          });
+        }
+      } catch (sbError) {
+        console.warn("Supabase history insert failed:", sbError);
+      }
+
+      // Show success
+      document.getElementById("qrFormContainer").classList.add("hidden");
+      document.getElementById("successState").classList.remove("hidden");
+      form.reset();
+
+    } catch (err) {
+      console.error("QR Submit Error:", err);
+      alert("Ошибка отправки заявки. Попробуйте еще раз.");
+    } finally {
+      setBusy(btn, false, "Отправляем...", "Вызвать мастера");
+    }
+  });
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   initClientRequestApp();
   initGeneratorApp();
+  initQrApp();
 });
