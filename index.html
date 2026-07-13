@@ -12,17 +12,18 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #F8FAFC;
-      --surface: #FFFFFF;
-      --surface-soft: #EFF6FF;
-      --text: #1E293B;
-      --muted: #64748B;
-      --line: #E2E8F0;
-      --blue: #2563EB;
-      --blue-dark: #1D4ED8;
-      --shadow: 0 20px 40px rgba(15, 23, 42, 0.07);
-      --radius: 20px;
-      --radius-sm: 12px;
+      --bg: #0A0F1C;
+      --surface: #111827;
+      --surface-soft: #1F2937;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+      --line: #334155;
+      --accent: #00E5FF;
+      --accent-hover: #00C2FF;
+      --accent-glow: rgba(0, 229, 255, 0.4);
+      --shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      --radius: 24px;
+      --radius-sm: 16px;
     }
 
     html { -webkit-text-size-adjust: 100%; }
@@ -40,13 +41,13 @@
 
     .app {
       width: 100%;
-      max-width: 980px;
+      max-width: 800px;
       margin: 0 auto;
     }
 
     .card {
       background: var(--surface);
-      border: 1px solid rgba(226, 232, 240, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.05);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
     }
@@ -56,46 +57,40 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      padding: 18px;
-      margin-bottom: 14px;
+      padding: 18px 24px;
+      margin-bottom: 24px;
     }
 
     .brand {
       display: flex;
       align-items: center;
       gap: 12px;
-      min-width: 0;
     }
 
     .brand-logo {
       height: 36px;
-      max-height: 40px;
-      width: auto;
       object-fit: contain;
-      display: block;
       border-radius: 8px;
     }
 
     .brand-name {
-      color: #1E3A8A;
-      font-size: 1.05rem;
+      color: var(--accent);
+      font-size: 1.1rem;
       font-weight: 800;
       letter-spacing: 0.5px;
       text-transform: uppercase;
-      white-space: nowrap;
+      text-shadow: 0 0 10px var(--accent-glow);
     }
 
     .hello {
       text-align: right;
-      min-width: 0;
     }
 
     .hello span {
       display: block;
       color: var(--muted);
-      font-size: 0.72rem;
+      font-size: 0.75rem;
       font-weight: 600;
-      margin-bottom: 2px;
     }
 
     .hello strong {
@@ -103,13 +98,140 @@
       color: var(--text);
       font-size: 0.95rem;
       font-weight: 800;
-      word-break: break-word;
+    }
+
+    .discount-banner {
+      background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(0, 0, 0, 0));
+      border: 1px solid var(--accent);
+      border-radius: var(--radius-sm);
+      padding: 16px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 0 20px var(--accent-glow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .discount-banner::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%; width: 200%; height: 200%;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      opacity: 0.2;
+      pointer-events: none;
+    }
+
+    .discount-title {
+      color: var(--accent);
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .discount-desc {
+      color: var(--text);
+      font-size: 0.85rem;
+      margin-bottom: 12px;
+    }
+
+    .discount-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      background: rgba(0, 229, 255, 0.15);
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 12px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      z-index: 1;
+    }
+
+    .discount-btn:hover {
+      background: var(--accent);
+      color: #000;
+      box-shadow: 0 0 15px var(--accent);
+    }
+
+    .hero-block {
+      text-align: center;
+      margin-bottom: 32px;
+      padding: 24px 16px;
+    }
+
+    .hero-title {
+      color: var(--accent);
+      font-size: 1rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 12px;
+    }
+
+    .hero-slogan {
+      font-size: 2.2rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 16px;
+      color: #FFFFFF;
+      text-shadow: 0 4px 12px rgba(0,0,0,0.5);
+    }
+
+    .hero-subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      max-width: 600px;
+      margin: 0 auto 32px auto;
+      line-height: 1.6;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+      text-align: left;
+    }
+
+    .benefit-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--surface-soft);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .benefit-icon {
+      font-size: 1.4rem;
+      color: var(--accent);
+      filter: drop-shadow(0 0 5px var(--accent-glow));
+    }
+
+    .benefit-text {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.4;
     }
 
     .status-card {
-      padding: 14px 16px;
-      margin-bottom: 14px;
-      background: linear-gradient(180deg, #FFFFFF 0%, #F8FBFF 100%);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+      background: var(--surface-soft);
+      border: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: var(--radius-sm);
     }
 
     .status-label {
@@ -118,103 +240,112 @@
       font-weight: 700;
       text-transform: uppercase;
       letter-spacing: 0.04em;
-      margin-bottom: 5px;
     }
 
     .status-value {
-      color: #1E3A8A;
-      font-size: 0.98rem;
+      color: var(--accent);
+      font-size: 0.95rem;
       font-weight: 800;
     }
 
     .form-card {
-      padding: 18px;
+      padding: 32px 24px;
     }
 
     .section-title {
-      color: #1E3A8A;
-      font-size: 1.12rem;
+      color: #FFF;
+      font-size: 1.3rem;
       font-weight: 800;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
-    .request-grid {
-      display: grid;
-      gap: 24px;
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 4px;
+      height: 20px;
+      background: var(--accent);
+      border-radius: 4px;
+      box-shadow: 0 0 10px var(--accent-glow);
     }
 
     .panel {
-      padding: 18px;
-      border-radius: 16px;
-      background: #F8FAFC;
-      border: 1px solid var(--line);
-    }
-
-    .panel-head {
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 10px;
-      margin-bottom: 16px;
+      padding: 20px;
+      border-radius: var(--radius-sm);
+      background: var(--surface-soft);
+      border: 1px solid rgba(255,255,255,0.03);
+      margin-bottom: 24px;
     }
 
     .panel-title {
       color: var(--text);
-      font-size: 0.94rem;
-      font-weight: 800;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 16px;
     }
 
     .printer-list {
       display: grid;
-      gap: 10px;
+      gap: 12px;
     }
 
     .printer-item {
       display: flex;
-      gap: 10px;
-      align-items: flex-start;
-      padding: 12px;
+      gap: 12px;
+      align-items: center;
+      padding: 14px 16px;
       border: 1px solid var(--line);
-      border-radius: 14px;
+      border-radius: 12px;
       background: var(--surface);
       cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .printer-item:hover {
+      border-color: var(--accent);
+      background: rgba(0, 229, 255, 0.05);
     }
 
     .printer-item input {
-      width: 18px;
-      height: 18px;
-      margin-top: 2px;
-      accent-color: var(--blue);
+      width: 20px;
+      height: 20px;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+
+    .printer-info {
+      flex: 1;
     }
 
     .printer-name {
-      color: var(--text);
-      font-size: 0.92rem;
-      font-weight: 800;
+      color: #FFF;
+      font-size: 0.95rem;
+      font-weight: 700;
     }
 
     .printer-meta {
       color: var(--muted);
-      font-size: 0.78rem;
-      margin-top: 2px;
+      font-size: 0.8rem;
+      margin-top: 4px;
     }
 
     .empty-state {
-      padding: 14px;
-      border-radius: 14px;
+      padding: 16px;
+      border-radius: 12px;
       color: var(--muted);
-      background: #FFFFFF;
-      border: 1px dashed #CBD5E1;
+      background: var(--surface);
+      border: 1px dashed var(--line);
       font-size: 0.86rem;
+      text-align: center;
     }
 
     .service-options {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 8px;
-      background: #F1F5F9;
-      padding: 8px;
-      border-radius: 16px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
     }
 
     .service-option,
@@ -234,101 +365,51 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 84px;
-      padding: 12px 10px;
+      min-height: 60px;
+      padding: 12px;
       border-radius: 12px;
-      border: none;
-      background: transparent;
-      color: #64748B;
-      font-size: 0.84rem;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--muted);
+      font-size: 0.85rem;
       font-weight: 600;
       text-align: center;
       cursor: pointer;
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: all 0.3s ease;
     }
 
     .service-option input:checked + span {
-      color: #1E3A8A;
-      background: #FFFFFF;
+      color: #000;
+      background: var(--accent);
+      border-color: var(--accent);
       font-weight: 800;
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
-      transform: scale(0.96);
+      box-shadow: 0 0 15px var(--accent-glow);
     }
 
     .add-printer-tile {
       width: 100%;
-      color: #64748B;
-      background: rgba(255, 255, 255, 0.35);
-      border: 1px dashed #CBD5E1;
+      color: var(--accent);
+      background: transparent;
+      border: 1px dashed var(--accent);
+      opacity: 0.8;
     }
 
     .add-printer-tile:hover {
-      background: #FFFFFF;
-      color: #1E3A8A;
-      border-color: #2563EB;
-      box-shadow: 0 6px 16px rgba(15, 23, 42, 0.06);
-      transform: scale(0.96);
-    }
-
-    .consult-link,
-    .secondary-btn,
-    .primary-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 44px;
-      border-radius: 12px;
-      padding: 11px 14px;
-      border: 0;
-      text-decoration: none;
-      font-size: 0.9rem;
-      font-weight: 800;
-      cursor: pointer;
-      transition: 0.2s ease;
-    }
-
-    .consult-link {
-      width: auto;
-      margin-top: 14px;
-      color: var(--blue);
-      background: #FFFFFF;
-      border: 1px solid #BFDBFE;
-    }
-
-    .secondary-btn {
-      color: var(--blue);
-      background: #FFFFFF;
-      border: 1px solid #BFDBFE;
-    }
-
-    .primary-btn {
-      width: 100%;
-      color: #FFFFFF;
-      background: var(--blue);
-      box-shadow: 0 14px 30px rgba(37, 99, 235, 0.22);
-      min-height: 54px;
-      font-size: 1rem;
-    }
-
-    .consult-link:hover,
-    .secondary-btn:hover {
-      background: #EFF6FF;
-    }
-
-    .primary-btn:hover {
-      background: var(--blue-dark);
+      opacity: 1;
+      background: rgba(0, 229, 255, 0.1);
+      box-shadow: 0 0 15px var(--accent-glow);
     }
 
     .field {
-      margin-top: 24px;
+      margin-bottom: 24px;
     }
 
     .field label {
       display: block;
-      color: var(--muted);
-      font-size: 0.8rem;
+      color: var(--text);
+      font-size: 0.9rem;
       font-weight: 700;
-      margin-bottom: 7px;
+      margin-bottom: 8px;
     }
 
     .field textarea,
@@ -336,17 +417,32 @@
     .field input,
     .modal input {
       width: 100%;
-      padding: 14px 15px;
+      padding: 16px;
       border: 1px solid var(--line);
-      border-radius: 14px;
-      background: #F8FAFC;
-      color: var(--text);
+      border-radius: 12px;
+      background: var(--surface);
+      color: #FFF;
       outline: none;
-      font-size: 1rem;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .field select {
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 16px center;
+      background-size: 16px;
+      padding-right: 40px;
+    }
+
+    .field select option {
+      background: var(--surface);
+      color: var(--text);
     }
 
     .field textarea {
-      min-height: 118px;
+      min-height: 100px;
       resize: vertical;
     }
 
@@ -354,66 +450,74 @@
     .field select:focus,
     .field input:focus,
     .modal input:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.12);
-      background: #FFFFFF;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(0, 229, 255, 0.1);
+      background: var(--surface-soft);
     }
 
-    .promo {
-      margin: 0 0 14px;
-      padding: 24px;
-      border-radius: 24px;
-      border: 1px solid #DBEAFE;
-      background: linear-gradient(145deg, #EFF6FF, #FFFFFF);
-      box-shadow: 0 16px 34px rgba(37, 99, 235, 0.08);
-      text-align: left;
-    }
-
-    .promo h3 {
-      color: #1E3A8A;
-      font-size: 1.15rem;
-      font-weight: 800;
-      margin-bottom: 16px;
-    }
-
-    .promo-content {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      margin-bottom: 20px;
-    }
-
-    .promo-item {
-      display: flex;
-      flex-direction: column;
-      font-size: 0.88rem;
-      line-height: 1.4;
-    }
-
-    .promo-item strong {
-      color: #1E3A8A;
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
-
-    .promo-item span {
+    .field textarea::placeholder,
+    .field input::placeholder,
+    .modal input::placeholder {
       color: var(--muted);
     }
 
-    .promo-footer {
-      font-size: 0.8rem;
-      color: #94A3B8;
-      border-top: 1px dashed #DBEAFE;
-      padding-top: 10px;
-      margin-top: 4px;
+    .primary-btn {
+      width: 100%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 56px;
+      border-radius: 16px;
+      border: none;
+      color: #000;
+      background: var(--accent);
+      font-size: 1.05rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 20px rgba(0, 229, 255, 0.3);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
+      background: var(--accent-hover);
+    }
+
+    .secondary-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      border-radius: 12px;
+      padding: 10px 20px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .secondary-btn:hover {
+      background: var(--surface-soft);
+      border-color: var(--muted);
     }
 
     .loading,
     .error {
-      padding: 18px;
+      padding: 32px 24px;
       text-align: center;
       color: var(--muted);
       font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .error {
+      color: #F87171;
     }
 
     .hidden { display: none !important; }
@@ -422,68 +526,87 @@
       position: fixed;
       inset: 0;
       display: grid;
-      place-items: end center;
+      place-items: center;
       padding: 16px;
-      background: rgba(15, 23, 42, 0.36);
-      z-index: 20;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(4px);
+      z-index: 100;
     }
 
     .modal {
       width: 100%;
-      max-width: 420px;
-      padding: 18px;
-      border-radius: 22px;
-      background: #FFFFFF;
-      box-shadow: 0 24px 70px rgba(15, 23, 42, 0.2);
+      max-width: 440px;
+      padding: 24px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.5);
     }
 
     .modal h2 {
-      color: #1E3A8A;
-      font-size: 1.05rem;
+      color: #FFF;
+      font-size: 1.2rem;
       font-weight: 800;
+      margin-bottom: 20px;
+    }
+
+    .modal input {
       margin-bottom: 12px;
     }
 
     .modal-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 14px;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .modal-actions .primary-btn {
+      min-height: 48px;
+      border-radius: 12px;
+      font-size: 0.95rem;
     }
 
     .toast {
       position: fixed;
       left: 16px;
       right: 16px;
-      bottom: max(18px, env(safe-area-inset-bottom));
-      max-width: 440px;
+      bottom: max(24px, env(safe-area-inset-bottom));
+      max-width: 400px;
       margin: 0 auto;
-      padding: 16px 18px;
-      border-radius: 18px;
-      color: #FFFFFF;
-      background: linear-gradient(145deg, #2563EB, #1E3A8A);
-      box-shadow: 0 20px 44px rgba(37, 99, 235, 0.28);
-      font-size: 0.94rem;
+      padding: 16px 20px;
+      border-radius: 16px;
+      color: #000;
+      background: var(--accent);
+      box-shadow: 0 10px 30px rgba(0, 229, 255, 0.4);
+      font-size: 1rem;
       font-weight: 800;
       text-align: center;
-      z-index: 30;
+      z-index: 200;
     }
 
-    #submitRequestBtn {
-      margin-top: 28px;
-    }
-
-    @media (min-width: 760px) {
-      body { padding: 32px 24px; }
-      .topbar { padding: 22px; }
-      .form-card { padding: 24px; }
-      .request-grid { grid-template-columns: 1fr; }
-      .modal-backdrop { place-items: center; }
+    @media (max-width: 600px) {
+      .benefits-grid {
+        grid-template-columns: 1fr;
+      }
+      .service-options {
+        grid-template-columns: 1fr;
+      }
+      .hero-slogan {
+        font-size: 1.8rem;
+      }
     }
   </style>
 </head>
 <body>
   <main id="clientRequestApp" class="app">
+    
+    <div class="discount-banner">
+      <div class="discount-title">🎁 Скидка 10% для клиентов VAIRE Service</div>
+      <div class="discount-desc">На услуги VAIRE Print (Типография) и VAIRE Promotion (Реклама)</div>
+      <a class="discount-btn" href="https://wa.me/77002322567?text=Здравствуйте!%20Хочу%20узнать%20подробности%20про%20скидку%2010%25%20для%20клиентов%20VAIRE%20Service" target="_blank" rel="noopener">Узнать подробности в WhatsApp</a>
+    </div>
+
     <section class="card topbar">
       <div class="brand">
         <img class="brand-logo" src="123.png" alt="VAIRE GROUP">
@@ -495,63 +618,66 @@
       </div>
     </section>
 
+    <div class="hero-block">
+      <div class="hero-title">Сервис по заправке картриджей</div>
+      <div class="hero-slogan">ЗАПРАВКА БЕЗ ЗАБОТ</div>
+      <div class="hero-subtitle">Ваш принтер никогда не остановится. Приезжаем, меняем картридж и вы продолжаете работать.</div>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <div class="benefit-icon">🕒</div>
+          <div class="benefit-text">Быстрый выезд<br>в день обращения</div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🖨</div>
+          <div class="benefit-text">Замена картриджа<br>за 3-5 минут</div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🔄</div>
+          <div class="benefit-text">Обменный фонд<br>всегда в наличии</div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon">🛡</div>
+          <div class="benefit-text">Гарантия качества<br>на все услуги</div>
+        </div>
+      </div>
+    </div>
+
     <div id="loadingState" class="card loading">Загружаем данные клиента...</div>
     <div id="errorState" class="card error hidden">Не удалось загрузить данные. Проверьте ссылку с номером телефона.</div>
 
     <div id="mainContent" class="hidden">
-      <section class="card status-card">
+      
+      <section class="status-card">
         <div class="status-label">Последняя заявка</div>
         <div id="lastRequestStatus" class="status-value">Информация отсутствует</div>
-      </section>
-
-      <section class="promo">
-        <h3>🎁 Скидка 10% для клиентов VAIRE Service</h3>
-        <div class="promo-content">
-          <div class="promo-item">
-            <strong>🖨 VAIRE Print (Типография)</strong>
-            <span>Печать визиток, листовок, баннеров, наклеек и полиграфии.</span>
-          </div>
-          <div class="promo-item">
-            <strong>📢 VAIRE Promotion (Реклама)</strong>
-            <span>Промо-персонал, раздача листовок, расклейка и рекламные услуги.</span>
-          </div>
-          <div class="promo-footer">
-            <em>Обслуживается компанией VAIRE GROUP. Комплексное сопровождение вашего офиса.</em>
-          </div>
-        </div>
-        <a class="consult-link" href="https://wa.me/77002322567?text=Здравствуйте!%20Хочу%20узнать%20подробности%20про%20скидку%2010%25%20для%20клиентов%20VAIRE%20Service" target="_blank" rel="noopener">Узнать подробности в WhatsApp</a>
       </section>
 
       <section class="card form-card">
         <h1 class="section-title">Оставить заявку</h1>
 
         <form id="clientRequestForm">
-          <div class="request-grid">
-            <div class="panel">
-              <div class="panel-head">
-                <div class="panel-title">1. Выберите принтер</div>
-              </div>
-              <div id="printerList" class="printer-list"></div>
-            </div>
+          <div class="panel">
+            <div class="panel-title">1. Выберите принтер</div>
+            <div id="printerList" class="printer-list"></div>
+          </div>
 
-            <div class="panel">
-              <div class="panel-title">2. Выберите услугу или действие</div>
-              <div class="service-options" role="radiogroup" aria-label="Тип услуги">
-                <input type="hidden" id="selectedService" value="Нужна замена картриджа">
-                <label class="service-option">
-                  <input type="radio" name="serviceType" value="Замена картриджа" checked>
-                  <span class="service-text">Нужна замена картриджа</span>
-                </label>
-                <label class="service-option">
-                  <input type="radio" name="serviceType" value="Ремонт">
-                  <span class="service-text">Принтер сломался / Ремонт</span>
-                </label>
-                <label class="service-option">
-                  <input type="radio" name="serviceType" value="Консультация">
-                  <span class="service-text">Консультация</span>
-                </label>
-                <button type="button" id="addPrinterBtn" class="add-printer-tile service-text">+ Добавить новый принтер</button>
-              </div>
+          <div class="panel">
+            <div class="panel-title">2. Выберите услугу или действие</div>
+            <div class="service-options" role="radiogroup" aria-label="Тип услуги">
+              <input type="hidden" id="selectedService" value="Нужна замена картриджа">
+              <label class="service-option">
+                <input type="radio" name="serviceType" value="Замена картриджа" checked>
+                <span class="service-text">Нужна замена картриджа</span>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="serviceType" value="Ремонт">
+                <span class="service-text">Принтер сломался / Ремонт</span>
+              </label>
+              <label class="service-option">
+                <input type="radio" name="serviceType" value="Консультация">
+                <span class="service-text">Консультация</span>
+              </label>
+              <button type="button" id="addPrinterBtn" class="add-printer-tile service-text">+ Добавить новый принтер</button>
             </div>
           </div>
 
@@ -572,7 +698,7 @@
               <option value="В течение дня">В течение дня</option>
               <option value="custom">Указать свое время</option>
             </select>
-            <input type="text" id="customVisitTimeInput" class="hidden" placeholder="Например: после 17:00 или завтра к 14:30" style="margin-top: 10px;">
+            <input type="text" id="customVisitTimeInput" class="hidden" placeholder="Например: после 17:00 или завтра к 14:30" style="margin-top: 12px;">
           </div>
 
           <button id="submitRequestBtn" class="primary-btn" type="submit">Отправить заявку</button>
@@ -585,8 +711,8 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addPrinterTitle">
       <h2 id="addPrinterTitle">Добавить принтер</h2>
       <input type="text" id="newPrinterModel" placeholder="Модель принтера, например Canon LBP6030">
-      <input type="text" id="newPrinterCartridge" placeholder="Номер картриджа, например CF259A" style="margin-top: 10px;">
-      <input type="text" id="newPrinterLocation" placeholder="Кабинет или адрес, например каб. 104" style="margin-top: 10px;">
+      <input type="text" id="newPrinterCartridge" placeholder="Номер картриджа, например CF259A">
+      <input type="text" id="newPrinterLocation" placeholder="Кабинет или адрес, например каб. 104">
       <div class="modal-actions">
         <button type="button" id="closeModalBtn" class="secondary-btn">Отмена</button>
         <button type="button" id="savePrinterBtn" class="primary-btn">Сохранить</button>
@@ -597,12 +723,12 @@
   <div id="consultModal" class="modal-backdrop hidden" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="consultModalTitle">
       <h2 id="consultModalTitle">Консультация с мастером</h2>
-      <p style="margin: 10px 0; color: var(--muted); font-size: 0.95rem;">
+      <p style="margin: 10px 0 24px; color: var(--muted); font-size: 0.95rem; line-height: 1.5;">
         Желаете перейти в WhatsApp для личной консультации с мастером?
       </p>
-      <div class="modal-actions" style="margin-top: 20px;">
+      <div class="modal-actions">
         <button type="button" id="closeConsultModalBtn" class="secondary-btn">Отмена</button>
-        <a href="https://wa.me/77002322567?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике." target="_blank" rel="noopener" class="primary-btn" id="confirmConsultBtn" style="text-decoration: none; text-align: center;">Написать в WhatsApp</a>
+        <a href="https://wa.me/77002322567?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике." target="_blank" rel="noopener" class="primary-btn" id="confirmConsultBtn" style="text-decoration: none; text-align: center;">WhatsApp</a>
       </div>
     </div>
   </div>
