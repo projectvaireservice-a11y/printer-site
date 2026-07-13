@@ -7,8 +7,10 @@ let clientPhone = "";
 let clientData = null;
 let clientPrinters = [];
 let qrPrinterId = "";
+let generatedStickerUrl = "";
+let generatedStickerPrinterId = "";
 
-const supabaseClient = window.supabase
+let supabaseClient = window.supabase
   ? window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY)
   : null;
 
@@ -120,28 +122,35 @@ if (orderForm) {
     setBusy(submitBtn, true, "Сохраняем...", "Сгенерировать и отправить в базу");
 
     try {
-      const clientResponse = await requestRest("clients?on_conflict=phone", {
-        method: "POST",
-        headers: { "Prefer": "resolution=merge-duplicates,return=minimal" },
-        body: JSON.stringify({ name, phone, address })
-      });
+      if (!supabaseClient && window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+      }
 
-      if (!clientResponse.ok) throw new Error("Client upsert failed");
+      if (!supabaseClient) throw new Error("Supabase client not initialized");
 
-      const printerResponse = await requestRest("printers", {
-        method: "POST",
-        headers: { "Prefer": "return=minimal" },
-        body: JSON.stringify({
+      // Upsert client on_conflict=phone
+      const { error: clientError } = await supabaseClient
+        .from("clients")
+        .upsert({ name, phone, address }, { onConflict: "phone" });
+
+      if (clientError) throw clientError;
+
+      // Insert printer using both old and new schema fields
+      const { error: printerError } = await supabaseClient
+        .from("printers")
+        .insert({
           id: printerId,
-          phone,
-          model,
+          name: printerId,
+          phone: phone,
+          client_phone: phone,
           cartridge_number: cartridge,
-          address,
-          status: "Новый",
-        })
-      });
+          location_note: address,
+          address: address,
+          model: model,
+          status: "Новый"
+        });
 
-      if (!printerResponse.ok) throw new Error("Printer insert failed");
+      if (printerError) throw printerError;
 
       const baseUrl = window.location.href.replace(/[^/]*$/, "").replace(/\/$/, "");
       const fullUrl = `${baseUrl}/index.html?phone=${encodeURIComponent(phone)}&printer_id=${encodeURIComponent(printerId)}`;
@@ -155,16 +164,55 @@ if (orderForm) {
         new QRCode(qrContainer, { text: fullUrl, width: 200, height: 200 });
       }
 
+      generatedStickerUrl = fullUrl;
+      generatedStickerPrinterId = printerId;
+
       if (qrPrinterId) qrPrinterId.textContent = `ID: ${printerId}`;
       if (qrUrl) qrUrl.innerHTML = `<a href="${fullUrl}" target="_blank" rel="noopener">${fullUrl}</a>`;
       if (qrResult) qrResult.classList.remove("hidden");
       qrResult?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      if (typeof loadPrintersWithHistory === "function") {
+        await loadPrintersWithHistory();
+      }
     } catch (error) {
       console.error("Ошибка генерации QR:", error);
       alert("Не удалось сохранить клиента или принтер. Проверьте настройки Supabase.");
     } finally {
       setBusy(submitBtn, false, "Сохраняем...", "Сгенерировать и отправить в базу");
     }
+  });
+}
+
+function prepareAndPrintSticker(printerId, url) {
+  const stickerQr = document.getElementById("stickerQr");
+  const stickerInventory = document.getElementById("stickerInventory");
+
+  if (!stickerQr || !stickerInventory) {
+    console.error("Элементы макета наклейки не найдены в DOM");
+    return;
+  }
+
+  stickerQr.innerHTML = "";
+  stickerInventory.textContent = printerId;
+  new QRCode(stickerQr, {
+    text: url,
+    width: 190,
+    height: 190
+  });
+
+  // Задержка перед печатью для генерации QR-кода
+  window.setTimeout(() => window.print(), 150);
+}
+
+const printStickerBtn = document.getElementById("printStickerBtn");
+if (printStickerBtn) {
+  printStickerBtn.addEventListener("click", () => {
+    if (!generatedStickerUrl || !generatedStickerPrinterId) {
+      alert("Сначала сгенерируйте QR-код.");
+      return;
+    }
+    prepareAndPrintSticker(generatedStickerPrinterId, generatedStickerUrl);
   });
 }
 
@@ -183,17 +231,39 @@ if (saveServiceBtn) {
     setBusy(saveServiceBtn, true, "Сохраняем...", "Сохранить обслуживание");
 
     try {
-      const response = await requestRest(`printers?id=eq.${encodeURIComponent(printerId)}`, {
-        method: "PATCH",
-        headers: { "Prefer": "return=minimal" },
-        body: JSON.stringify({ last_service: serviceText })
-      });
+      if (!supabaseClient && window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+      }
 
-      if (!response.ok) throw new Error("Service update failed");
-      alert("История обслуживания успешно обновлена!");
+      if (!supabaseClient) throw new Error("Supabase client not initialized");
+
+      // Insert into service_history instead of patching printers
+      const { error: serviceError } = await supabaseClient
+        .from("service_history")
+        .insert({
+          printer_id: printerId,
+          service_type: "Обслуживание",
+          problem_description: serviceText,
+          visit_time: new Date().toLocaleString("ru-RU"),
+          comment: "",
+          phone: ""
+        });
+
+      if (serviceError) throw serviceError;
+
+      const serviceInput = document.getElementById("updateServiceText");
+      if (serviceInput) serviceInput.value = "";
+      alert("История обслуживания успешно добавлена!");
+
+      if (typeof loadPrintersWithHistory === "function") {
+        await loadPrintersWithHistory();
+      }
+      if (typeof loadSelectedPrinterHistory === "function") {
+        await loadSelectedPrinterHistory(printerId);
+      }
     } catch (error) {
       console.error("Ошибка обновления обслуживания:", error);
-      alert("Не удалось обновить историю обслуживания. Попробуйте позже.");
+      alert("Не удалось сохранить историю обслуживания. Попробуйте позже.");
     } finally {
       setBusy(saveServiceBtn, false, "Сохраняем...", "Сохранить обслуживание");
     }
@@ -468,4 +538,259 @@ async function initClientRequestApp() {
   }
 }
 
-document.addEventListener("DOMContentLoaded", initClientRequestApp);
+let allDashboardPrinters = [];
+
+async function loadPrintersWithHistory() {
+  const loadingEl = document.getElementById("dbLoading");
+  const errorEl = document.getElementById("dbError");
+  const wrapperEl = document.getElementById("printerListWrapper");
+  const listEl = document.getElementById("dbPrinterList");
+
+  if (!listEl) return; // Not on generator page
+
+  loadingEl?.classList.remove("hidden");
+  errorEl?.classList.add("hidden");
+  wrapperEl?.classList.add("hidden");
+
+  try {
+    // Initialize supabaseClient if it wasn't initialized at startup
+    if (!supabaseClient && window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    if (!supabaseClient) throw new Error("Supabase client not initialized");
+
+    // Relational Fetching: printers with nested service_history
+    const { data: printers, error: fetchError } = await supabaseClient
+      .from("printers")
+      .select("*, service_history(*)")
+      .order("created_at", { ascending: false })
+      .order("created_at", { foreignTable: "service_history", ascending: false });
+
+    if (fetchError) throw fetchError;
+
+    allDashboardPrinters = printers || [];
+
+    renderDashboardPrinters(allDashboardPrinters);
+    loadingEl?.classList.add("hidden");
+    wrapperEl?.classList.remove("hidden");
+  } catch (err) {
+    console.error("Ошибка загрузки принтеров и истории:", err);
+    loadingEl?.classList.add("hidden");
+    errorEl?.classList.remove("hidden");
+  }
+}
+
+function renderDashboardPrinters(printersList) {
+  const listEl = document.getElementById("dbPrinterList");
+  if (!listEl) return;
+
+  if (printersList.length === 0) {
+    listEl.innerHTML = `<div class="empty-state" style="text-align: center; padding: 20px; color: #64748B;">Принтеры не найдены</div>`;
+    return;
+  }
+
+  listEl.innerHTML = printersList.map(printer => {
+    // Fallbacks for compatibility: name is printer name, id is fallback
+    const name = printer.name || printer.id || "Не указан";
+    const model = printer.model || "Модель не указана";
+    const cartridge = printer.cartridge_number || "Не указан";
+    const location = printer.location_note || printer.address || "Не указан";
+    
+    // Format phones string
+    const phonesArray = [];
+    if (printer.phone) phonesArray.push(printer.phone);
+    if (printer.client_phone) phonesArray.push(printer.client_phone);
+    const phones = phonesArray.join(" / ") || "Не указаны";
+
+    const serviceHistory = printer.service_history || [];
+
+    // Format service history list
+    let historyListHtml = "";
+    if (serviceHistory.length > 0) {
+      historyListHtml = `
+        <div class="history-list">
+          ${serviceHistory.map(history => {
+            const time = history.visit_time || new Date(history.created_at).toLocaleString("ru-RU");
+            const type = history.service_type || "Обслуживание";
+            const desc = history.problem_description || "Описание отсутствует";
+            return `
+              <div class="history-item">
+                <div class="history-item-header">
+                  <span>${escapeHtml(time)}</span>
+                  <span style="color: #2563EB;">${escapeHtml(type)}</span>
+                </div>
+                <div class="history-item-desc">${escapeHtml(desc)}</div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    } else {
+      historyListHtml = `<div class="empty-history" style="color: #94A3B8; font-size: 12px; font-style: italic; padding: 4px 0;">История обслуживания отсутствует</div>`;
+    }
+
+    return `
+      <div class="db-card" data-printer-name="${escapeHtml(name)}">
+        <div class="db-card-header">
+          <span class="badge">${escapeHtml(name)}</span>
+          <span class="db-card-model" style="font-size: 12px; color: #64748B; font-weight: normal; margin-left: 8px;">Всего обслуживаний: ${serviceHistory.length}</span>
+        </div>
+        <div style="font-weight: 700; font-size: 14px; color: #1E293B; margin-bottom: 8px;">
+          ${escapeHtml(model)}
+        </div>
+        <div class="db-meta-row">
+          <span class="meta-label">Телефоны:</span>
+          <span class="meta-value text-bold">${escapeHtml(phones)}</span>
+        </div>
+        <div class="db-meta-row">
+          <span class="meta-label">Картридж:</span>
+          <span class="meta-value">${escapeHtml(cartridge)}</span>
+        </div>
+        <div class="db-meta-row">
+          <span class="meta-label">Локация:</span>
+          <span class="meta-value">${escapeHtml(location)}</span>
+        </div>
+        <div class="history-box">
+          <h4>История обслуживания:</h4>
+          ${historyListHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // Add click event listeners
+  const cards = listEl.querySelectorAll(".db-card");
+  cards.forEach(card => {
+    card.addEventListener("click", (e) => {
+      // Prevent selection if user is clicking or scrolling inside the history-list scroll box
+      if (e.target.closest(".history-list")) {
+        return;
+      }
+      
+      const name = card.getAttribute("data-printer-name");
+      const updateIdInput = document.getElementById("updatePrinterId");
+      if (updateIdInput) {
+        updateIdInput.value = name;
+        updateIdInput.focus();
+        
+        // Load history for the selected printer in the left column
+        if (typeof loadSelectedPrinterHistory === "function") {
+          loadSelectedPrinterHistory(name);
+        }
+        
+        // Visual indicator that it was selected
+        card.style.backgroundColor = "#EFF6FF";
+        card.style.borderColor = "#2563EB";
+        setTimeout(() => {
+          card.style.backgroundColor = "";
+          card.style.borderColor = "";
+        }, 300);
+      }
+    });
+  });
+}
+
+function initDashboardSearch() {
+  const searchInput = document.getElementById("dbSearchInput");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    if (!query) {
+      renderDashboardPrinters(allDashboardPrinters);
+      return;
+    }
+
+    const filtered = allDashboardPrinters.filter(printer => {
+      const name = (printer.name || printer.id || "").toLowerCase();
+      const phone = (printer.phone || "").toLowerCase();
+      const clientPhone = (printer.client_phone || "").toLowerCase();
+      const cartridge = (printer.cartridge_number || "").toLowerCase();
+      const location = (printer.location_note || printer.address || "").toLowerCase();
+      
+      return name.includes(query) || 
+             phone.includes(query) || 
+             clientPhone.includes(query) || 
+             cartridge.includes(query) || 
+             location.includes(query);
+    });
+
+    renderDashboardPrinters(filtered);
+  });
+}
+
+async function loadSelectedPrinterHistory(printerId) {
+  const container = document.getElementById("selectedPrinterHistory");
+  const listEl = document.getElementById("selectedPrinterHistoryList");
+  if (!container || !listEl) return;
+
+  if (!printerId) {
+    container.classList.add("hidden");
+    listEl.innerHTML = "";
+    return;
+  }
+
+  container.classList.remove("hidden");
+  listEl.innerHTML = `<div style="font-size: 12px; color: #64748B; font-style: italic; padding: 4px 0;">Загрузка истории...</div>`;
+
+  try {
+    if (!supabaseClient && window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+    }
+    if (!supabaseClient) throw new Error("Supabase client not initialized");
+
+    // Fetch from service_history for this printer_id
+    const { data, error } = await supabaseClient
+      .from("service_history")
+      .select("*")
+      .eq("printer_id", printerId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      listEl.innerHTML = `<div style="font-size: 12px; color: #94A3B8; font-style: italic; padding: 4px 0;">История обслуживания отсутствует</div>`;
+      return;
+    }
+
+    listEl.innerHTML = data.map(item => {
+      const time = item.visit_time || new Date(item.created_at).toLocaleString("ru-RU");
+      const type = item.service_type || "Обслуживание";
+      const desc = item.problem_description || "Описание отсутствует";
+      return `
+        <div class="history-item">
+          <div class="history-item-header">
+            <span>${escapeHtml(time)}</span>
+            <span style="color: #2563EB; font-weight: bold;">${escapeHtml(type)}</span>
+          </div>
+          <div class="history-item-desc">${escapeHtml(desc)}</div>
+        </div>
+      `;
+    }).join("");
+  } catch (err) {
+    console.error("Ошибка загрузки истории выбранного принтера:", err);
+    listEl.innerHTML = `<div style="font-size: 12px; color: #EF4444; padding: 4px 0;">Не удалось загрузить историю</div>`;
+  }
+}
+
+async function initGeneratorApp() {
+  const dashboard = document.getElementById("printerDashboard");
+  if (!dashboard) return; // Not on generator page
+
+  const updatePrinterIdInput = document.getElementById("updatePrinterId");
+  if (updatePrinterIdInput) {
+    updatePrinterIdInput.addEventListener("input", () => {
+      const val = updatePrinterIdInput.value.trim();
+      loadSelectedPrinterHistory(val);
+    });
+  }
+
+  initDashboardSearch();
+  await loadPrintersWithHistory();
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initClientRequestApp();
+  initGeneratorApp();
+});
