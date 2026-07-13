@@ -332,7 +332,9 @@
         }
 
         @keyframes spin {
-            to { transform: rotate(360deg); }
+            to {
+                transform: rotate(360deg);
+            }
         }
 
         .db-error {
@@ -355,14 +357,17 @@
         .printer-list-wrapper::-webkit-scrollbar {
             width: 6px;
         }
+
         .printer-list-wrapper::-webkit-scrollbar-track {
             background: #F1F5F9;
             border-radius: 8px;
         }
+
         .printer-list-wrapper::-webkit-scrollbar-thumb {
             background: #CBD5E1;
             border-radius: 8px;
         }
+
         .printer-list-wrapper::-webkit-scrollbar-thumb:hover {
             background: #94A3B8;
         }
@@ -437,14 +442,14 @@
             padding-top: 10px;
             border-top: 1px dashed #E2E8F0;
         }
-        
+
         .history-box h4 {
             font-size: 13px;
             font-weight: 700;
             color: #475569;
             margin: 0 0 8px 0;
         }
-        
+
         .history-list {
             max-height: 150px;
             overflow-y: auto;
@@ -453,20 +458,22 @@
             gap: 8px;
             padding-right: 4px;
         }
-        
+
         /* Скроллбар для истории */
         .history-list::-webkit-scrollbar {
             width: 4px;
         }
+
         .history-list::-webkit-scrollbar-track {
             background: #F1F5F9;
             border-radius: 4px;
         }
+
         .history-list::-webkit-scrollbar-thumb {
             background: #CBD5E1;
             border-radius: 4px;
         }
-        
+
         .history-item {
             background: #F8FAFC;
             border: 1px solid #EFF2F6;
@@ -474,7 +481,7 @@
             padding: 8px 10px;
             font-size: 12px;
         }
-        
+
         .history-item-header {
             display: flex;
             justify-content: space-between;
@@ -482,7 +489,7 @@
             font-weight: 600;
             margin-bottom: 4px;
         }
-        
+
         .history-item-desc {
             color: #334155;
             line-height: 1.4;
@@ -508,10 +515,12 @@
         .selected-history-list::-webkit-scrollbar {
             width: 4px;
         }
+
         .selected-history-list::-webkit-scrollbar-track {
             background: #F1F5F9;
             border-radius: 4px;
         }
+
         .selected-history-list::-webkit-scrollbar-thumb {
             background: #CBD5E1;
             border-radius: 4px;
@@ -522,6 +531,7 @@
                 flex-direction: column;
                 align-items: center;
             }
+
             .dashboard-left,
             .dashboard-right {
                 width: 100%;
@@ -633,7 +643,9 @@
 
                 <!-- Блок истории работ для выбранного принтера -->
                 <div id="selectedPrinterHistory" class="selected-printer-history hidden">
-                    <h3 style="font-size: 14px; font-weight: 700; color: #1E3A8A; margin: 20px 0 10px 0; text-align: left;">История работ для выбранного принтера:</h3>
+                    <h3
+                        style="font-size: 14px; font-weight: 700; color: #1E3A8A; margin: 20px 0 10px 0; text-align: left;">
+                        История работ для выбранного принтера:</h3>
                     <div id="selectedPrinterHistoryList" class="selected-history-list">
                         <!-- Записи обслуживания будут загружаться сюда -->
                     </div>
