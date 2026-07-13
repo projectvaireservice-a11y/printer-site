@@ -447,7 +447,7 @@ async function submitClientRequest(event) {
 
   const button = document.getElementById("submitRequestBtn");
   const checkedPrinters = Array.from(document.querySelectorAll('input[name="printerIds"]:checked'));
-  const serviceType = document.querySelector('input[name="serviceType"]:checked')?.value || "Замена картриджа";
+  const serviceType = document.getElementById("selectedService")?.value || document.querySelector('input[name="serviceType"]:checked')?.value || "Замена картриджа";
   const selectedVisitTime = document.getElementById("visitTimeSelect")?.value || "В течение дня";
   const customVisitTime = document.getElementById("customVisitTimeInput")?.value.trim() || "";
   const visitTime = selectedVisitTime === "custom" ? (customVisitTime || "Не указано") : selectedVisitTime;
@@ -512,6 +512,15 @@ async function initClientRequestApp() {
   const loading = document.getElementById("loadingState");
   const error = document.getElementById("errorState");
   const content = document.getElementById("mainContent");
+
+  document.querySelectorAll(".service-text").forEach(el => {
+    el.addEventListener("click", () => {
+      const hiddenInput = document.getElementById("selectedService");
+      if (hiddenInput) {
+        hiddenInput.value = el.textContent.trim();
+      }
+    });
+  });
 
   document.getElementById("addPrinterBtn")?.addEventListener("click", openModal);
   document.getElementById("closeModalBtn")?.addEventListener("click", closeModal);
@@ -619,6 +628,7 @@ function renderDashboardPrinters(printersList) {
                 <div class="history-item-header">
                   <span>${escapeHtml(time)}</span>
                   <span style="color: #2563EB;">${escapeHtml(type)}</span>
+                  <button class="delete-history-btn delete-icon-btn" data-history-id="${history.id}" title="Удалить запись">🗑</button>
                 </div>
                 <div class="history-item-desc">${escapeHtml(desc)}</div>
               </div>
@@ -632,9 +642,12 @@ function renderDashboardPrinters(printersList) {
 
     return `
       <div class="db-card" data-printer-name="${escapeHtml(name)}">
-        <div class="db-card-header">
-          <span class="badge">${escapeHtml(name)}</span>
-          <span class="db-card-model" style="font-size: 12px; color: #64748B; font-weight: normal; margin-left: 8px;">Всего обслуживаний: ${serviceHistory.length}</span>
+        <div class="db-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span class="badge">${escapeHtml(name)}</span>
+            <span class="db-card-model" style="font-size: 12px; color: #64748B; font-weight: normal; margin-left: 8px;">Всего обслуживаний: ${serviceHistory.length}</span>
+          </div>
+          <button class="delete-printer-btn delete-icon-btn" data-printer-id="${name}" title="Удалить клиента и принтер">🗑</button>
         </div>
         <div style="font-weight: 700; font-size: 14px; color: #1E293B; margin-bottom: 8px;">
           ${escapeHtml(model)}
@@ -662,9 +675,67 @@ function renderDashboardPrinters(printersList) {
   // Add click event listeners
   const cards = listEl.querySelectorAll(".db-card");
   cards.forEach(card => {
+    // Delete history record
+    const deleteHistoryBtns = card.querySelectorAll(".delete-history-btn");
+    deleteHistoryBtns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (confirm('Удалить эту запись из истории?')) {
+          const historyId = btn.getAttribute("data-history-id");
+          try {
+            const { error } = await supabaseClient.from('service_history').delete().eq('id', historyId);
+            if (error) throw error;
+            await loadPrintersWithHistory();
+            if (typeof loadSelectedPrinterHistory === "function") {
+               const updateIdInput = document.getElementById("updatePrinterId");
+               if (updateIdInput && updateIdInput.value) {
+                 loadSelectedPrinterHistory(updateIdInput.value);
+               }
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Ошибка при удалении записи");
+          }
+        }
+      });
+    });
+
+    // Delete printer and client
+    const deletePrinterBtn = card.querySelector(".delete-printer-btn");
+    if (deletePrinterBtn) {
+      deletePrinterBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (confirm('Вы уверены, что хотите полностью удалить этот принтер и всю его историю?')) {
+          const printerId = deletePrinterBtn.getAttribute("data-printer-id");
+          try {
+            // Delete associated history first
+            await supabaseClient.from('service_history').delete().eq('printer_id', printerId);
+            // Delete the printer itself (we delete by name since ID and name are used interchangeably for identifying codes)
+            const { error } = await supabaseClient.from('printers').delete().or(`id.eq.${printerId},name.eq.${printerId}`);
+            if (error) throw error;
+            
+            // Remove from local list and UI without full page reload
+            allDashboardPrinters = allDashboardPrinters.filter(p => p.name !== printerId && p.id !== printerId);
+            card.remove();
+            
+            if (typeof loadSelectedPrinterHistory === "function") {
+               const updateIdInput = document.getElementById("updatePrinterId");
+               if (updateIdInput && updateIdInput.value === printerId) {
+                 updateIdInput.value = "";
+                 loadSelectedPrinterHistory("");
+               }
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Ошибка при удалении принтера");
+          }
+        }
+      });
+    }
+
     card.addEventListener("click", (e) => {
-      // Prevent selection if user is clicking or scrolling inside the history-list scroll box
-      if (e.target.closest(".history-list")) {
+      // Prevent selection if user is clicking or scrolling inside the history-list scroll box or clicking buttons
+      if (e.target.closest(".history-list") || e.target.closest("button")) {
         return;
       }
       

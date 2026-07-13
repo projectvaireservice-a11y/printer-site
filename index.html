@@ -537,19 +537,20 @@
             <div class="panel">
               <div class="panel-title">2. Выберите услугу или действие</div>
               <div class="service-options" role="radiogroup" aria-label="Тип услуги">
+                <input type="hidden" id="selectedService" value="Нужна замена картриджа">
                 <label class="service-option">
                   <input type="radio" name="serviceType" value="Замена картриджа" checked>
-                  <span>Нужна замена картриджа</span>
+                  <span class="service-text">Нужна замена картриджа</span>
                 </label>
                 <label class="service-option">
                   <input type="radio" name="serviceType" value="Ремонт">
-                  <span>Принтер сломался / Ремонт</span>
+                  <span class="service-text">Принтер сломался / Ремонт</span>
                 </label>
                 <label class="service-option">
                   <input type="radio" name="serviceType" value="Консультация">
-                  <span>Консультация</span>
+                  <span class="service-text">Консультация</span>
                 </label>
-                <button type="button" id="addPrinterBtn" class="add-printer-tile">+ Добавить новый принтер</button>
+                <button type="button" id="addPrinterBtn" class="add-printer-tile service-text">+ Добавить новый принтер</button>
               </div>
             </div>
           </div>
