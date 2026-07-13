@@ -297,93 +297,52 @@
 
   <div class="container">
     
-    <div class="benefits">
-      <div class="benefit-card">
-        <div class="benefit-icon">🚀</div>
-        <div class="benefit-text">
-          <h3>Быстрый выезд</h3>
-          <p>Мастер приедет в ваш офис в течение дня для оперативного решения проблемы.</p>
-        </div>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon">🛠</div>
-        <div class="benefit-text">
-          <h3>Полный цикл</h3>
-          <p>Заправка картриджей, замена деталей, чистка и ремонт любой сложности.</p>
-        </div>
-      </div>
-      <div class="benefit-card">
-        <div class="benefit-icon">📄</div>
-        <div class="benefit-text">
-          <h3>Работа с юрлицами</h3>
-          <p>Предоставляем все необходимые закрывающие документы и акты выполненных работ.</p>
-        </div>
-      </div>
+    <div class="form-card">
+      <h2 style="margin-bottom: 12px;">О компании VAIRE GROUP</h2>
+      <p style="color: var(--muted); font-size: 0.95rem;">
+        Мы предоставляем комплексное обслуживание оргтехники и офисов в Астане. Быстрая заправка картриджей, ремонт принтеров любой сложности и продажа расходных материалов без выходных.
+      </p>
     </div>
 
-    <div class="form-card" id="qrFormContainer">
-      <h2>Мгновенный вызов мастера</h2>
-      <form id="qrClientForm">
-        
-        <div class="field">
-          <label for="qrName">Ваше имя / Компания *</label>
-          <input type="text" id="qrName" placeholder="Иван / ТОО Пример" required>
-        </div>
-
-        <div class="field">
-          <label for="qrPhone">Телефон для связи *</label>
-          <input type="tel" id="qrPhone" placeholder="+7 (700) 000-00-00" required>
-        </div>
-
-        <div class="field">
-          <label for="qrAddress">Адрес / Кабинет *</label>
-          <input type="text" id="qrAddress" placeholder="ул. Мангилик Ел, БЦ Асыл, каб 305" required>
-        </div>
-
-        <div class="field">
-          <label>Услуга</label>
-          <div class="service-options">
-            <input type="hidden" id="qrSelectedService" value="Заправка картриджа">
-            <label class="service-option">
-              <input type="radio" name="qrServiceType" value="Заправка картриджа" checked>
-              <span class="qr-service-text">Заправка картриджа</span>
-            </label>
-            <label class="service-option">
-              <input type="radio" name="qrServiceType" value="Ремонт принтера">
-              <span class="qr-service-text">Ремонт принтера</span>
-            </label>
-            <label class="service-option">
-              <input type="radio" name="qrServiceType" value="Консультация">
-              <span class="qr-service-text">Консультация</span>
-            </label>
+    <div class="form-card" style="margin-top: 16px;">
+      <h2 style="margin-bottom: 16px; font-size: 1.15rem;">Наши услуги</h2>
+      <div class="benefits">
+        <div class="benefit-card">
+          <div class="benefit-icon">🖨</div>
+          <div class="benefit-text">
+            <h3>Заправка картриджей</h3>
+            <p>Быстро и с гарантией качества.</p>
           </div>
         </div>
-
-        <div class="field">
-          <label for="qrTime">Удобное время визита</label>
-          <select id="qrTime">
-            <option value="Как можно скорее">Как можно скорее</option>
-            <option value="Сегодня до 12:00">Сегодня до 12:00</option>
-            <option value="Сегодня 12:00 - 15:00">Сегодня 12:00 - 15:00</option>
-            <option value="Сегодня 15:00 - 18:00">Сегодня 15:00 - 18:00</option>
-            <option value="Завтра в первой половине">Завтра в первой половине</option>
-          </select>
+        <div class="benefit-card">
+          <div class="benefit-icon">🛠</div>
+          <div class="benefit-text">
+            <h3>Ремонт и диагностика принтеров</h3>
+            <p>Устранение поломок любой сложности.</p>
+          </div>
         </div>
-
-        <div class="field">
-          <label for="qrComment">Комментарий / Заметки</label>
-          <textarea id="qrComment" placeholder="Например: принтер жует бумагу"></textarea>
+        <div class="benefit-card">
+          <div class="benefit-icon">📄</div>
+          <div class="benefit-text">
+            <h3>Работа с юридическими лицами</h3>
+            <p>Предоставляем все закрывающие документы.</p>
+          </div>
         </div>
-
-        <button type="submit" class="submit-btn" id="qrSubmitBtn">Вызвать мастера</button>
-      </form>
+        <div class="benefit-card">
+          <div class="benefit-icon">🛒</div>
+          <div class="benefit-text">
+            <h3>Скупка и продажа</h3>
+            <p>Продажа и скупка б/у принтеров и картриджей.</p>
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="form-card hidden" id="successState">
-      <div class="icon">✅</div>
-      <h3>Заявка отправлена!</h3>
-      <p>Мастер скоро свяжется с вами для подтверждения.</p>
-      <button class="submit-btn" onclick="location.reload()" style="background: var(--bg); color: var(--text); border: 1px solid var(--line); box-shadow: none;">Отправить еще</button>
+    <div class="form-card" style="margin-top: 16px; text-align: center; border-color: var(--blue);">
+      <h2 style="margin-bottom: 12px; font-size: 1.2rem;">Остались вопросы или нужна помощь?</h2>
+      <a href="https://wa.me/77002322567?text=Здравствуйте!%20Я%20отсканировал%20QR-код%20на%20принтере.%20Нужна%20консультация%20/%20услуга." target="_blank" rel="noopener" class="submit-btn" style="display: block; text-decoration: none; box-sizing: border-box; background: #25D366; box-shadow: 0 10px 24px rgba(37, 211, 102, 0.25);">
+        Написать в WhatsApp
+      </a>
     </div>
 
     <div class="footer">

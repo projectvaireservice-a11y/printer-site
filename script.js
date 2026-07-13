@@ -102,7 +102,7 @@ async function sendTelegramRequest({ selectedPrinters, serviceType, visitTime, c
 async function sendEmailNotification({ selectedPrinters, serviceType, visitTime, comment }) {
   try {
     const BREVO_API_KEY = "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";
-    const EMAIL_RECIPIENT = "nikitastrumpro@gmail.com";
+    const EMAIL_RECIPIENT = "vaire.print@mail.ru";
     
     const clientName = clientData?.name || "Не указан";
     const address = selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.location_note
@@ -426,12 +426,6 @@ async function loadClient() {
   const greeting = document.getElementById("clientGreeting");
   if (greeting) greeting.textContent = `Здравствуйте, ${clientData.name || "клиент"}`;
 
-  const consultationLink = document.getElementById("consultationLink");
-  if (consultationLink) {
-    const cleanPhone = clientPhone.replace(/\D/g, "");
-    consultationLink.href = `https://wa.me/${cleanPhone}?text=${encodeURIComponent("Здравствуйте, нужна консультация")}`;
-  }
-
   await Promise.all([loadPrinters(), loadLastRequest()]);
 }
 
@@ -587,10 +581,16 @@ async function initClientRequestApp() {
   const content = document.getElementById("mainContent");
 
   document.querySelectorAll(".service-text").forEach(el => {
-    el.addEventListener("click", () => {
+    el.addEventListener("click", (e) => {
+      const text = el.textContent.trim();
+      if (text === "Консультация") {
+        e.preventDefault();
+        window.open("https://wa.me/77002322567?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике.", "_blank");
+        return;
+      }
       const hiddenInput = document.getElementById("selectedService");
       if (hiddenInput) {
-        hiddenInput.value = el.textContent.trim();
+        hiddenInput.value = text;
       }
     });
   });
@@ -940,10 +940,16 @@ async function initQrApp() {
 
   // Listen for service selection to update hidden input
   document.querySelectorAll(".qr-service-text").forEach(el => {
-    el.addEventListener("click", () => {
+    el.addEventListener("click", (e) => {
+      const text = el.textContent.trim();
+      if (text === "Консультация") {
+        e.preventDefault();
+        window.open("https://wa.me/77002322567?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике.", "_blank");
+        return;
+      }
       const hiddenInput = document.getElementById("qrSelectedService");
       if (hiddenInput) {
-        hiddenInput.value = el.textContent.trim();
+        hiddenInput.value = text;
       }
     });
   });
