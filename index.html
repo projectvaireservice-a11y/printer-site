@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -9,10 +10,16 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --bg: #283142;
+      --bg: #0D1117;
       --surface: #10172A;
       --surface-soft: #131C2E;
       --text: #F8FAFC;
@@ -25,7 +32,9 @@
       --radius-sm: 16px;
     }
 
-    html { -webkit-text-size-adjust: 100%; }
+    html {
+      -webkit-text-size-adjust: 100%;
+    }
 
     body {
       min-height: 100dvh;
@@ -36,7 +45,12 @@
       line-height: 1.5;
     }
 
-    button, input, textarea, select { font: inherit; }
+    button,
+    input,
+    textarea,
+    select {
+      font: inherit;
+    }
 
     .app {
       width: 100%;
@@ -364,7 +378,7 @@
       transition: all 0.3s ease;
     }
 
-    .service-option input:checked + span {
+    .service-option input:checked+span {
       color: #FFFFFF;
       background: var(--surface-soft);
       border-color: var(--accent);
@@ -500,7 +514,9 @@
       color: #F87171;
     }
 
-    .hidden { display: none !important; }
+    .hidden {
+      display: none !important;
+    }
 
     .modal-backdrop {
       position: fixed;
@@ -569,22 +585,27 @@
       .benefits-grid {
         grid-template-columns: 1fr;
       }
+
       .service-options {
         grid-template-columns: 1fr;
       }
+
       .hero-slogan {
         font-size: 1.8rem;
       }
     }
   </style>
 </head>
+
 <body>
   <main id="clientRequestApp" class="app">
-    
+
     <div class="discount-banner">
       <div class="discount-title">🎁 Скидка 10% для клиентов VAIRE Service</div>
       <div class="discount-desc">На услуги VAIRE Print (Типография) и VAIRE Promotion (Реклама)</div>
-      <a class="discount-btn" href="https://wa.me/77002322567?text=Здравствуйте!%20Хочу%20узнать%20подробности%20про%20скидку%2010%25%20для%20клиентов%20VAIRE%20Service" target="_blank" rel="noopener">Узнать подробности в WhatsApp</a>
+      <a class="discount-btn"
+        href="https://wa.me/77002322567?text=Здравствуйте!%20Хочу%20узнать%20подробности%20про%20скидку%2010%25%20для%20клиентов%20VAIRE%20Service"
+        target="_blank" rel="noopener">Узнать подробности в WhatsApp</a>
     </div>
 
     <section class="card topbar">
@@ -601,7 +622,8 @@
     <div class="hero-block">
       <div class="hero-title">Сервис по заправке картриджей</div>
       <div class="hero-slogan">ЗАПРАВКА БЕЗ ЗАБОТ</div>
-      <div class="hero-subtitle">Ваш принтер никогда не остановится. Приезжаем, меняем картридж и вы продолжаете работать.</div>
+      <div class="hero-subtitle">Ваш принтер никогда не остановится. Приезжаем, меняем картридж и вы продолжаете
+        работать.</div>
       <div class="benefits-grid">
         <div class="benefit-item">
           <div class="benefit-icon">🕒</div>
@@ -623,10 +645,11 @@
     </div>
 
     <div id="loadingState" class="card loading">Загружаем данные клиента...</div>
-    <div id="errorState" class="card error hidden">Не удалось загрузить данные. Проверьте ссылку с номером телефона.</div>
+    <div id="errorState" class="card error hidden">Не удалось загрузить данные. Проверьте ссылку с номером телефона.
+    </div>
 
     <div id="mainContent" class="hidden">
-      
+
       <section class="status-card">
         <div class="status-label">Последняя заявка</div>
         <div id="lastRequestStatus" class="status-value">Информация отсутствует</div>
@@ -657,13 +680,15 @@
                 <input type="radio" name="serviceType" value="Консультация">
                 <span class="service-text">Консультация</span>
               </label>
-              <button type="button" id="addPrinterBtn" class="add-printer-tile service-text">+ Добавить новый принтер</button>
+              <button type="button" id="addPrinterBtn" class="add-printer-tile service-text">+ Добавить новый
+                принтер</button>
             </div>
           </div>
 
           <div class="field">
             <label for="commentInput">3. Комментарий</label>
-            <textarea id="commentInput" placeholder="Опишите проблему, удобный вход или дополнительные детали"></textarea>
+            <textarea id="commentInput"
+              placeholder="Опишите проблему, удобный вход или дополнительные детали"></textarea>
           </div>
 
           <div class="field">
@@ -678,7 +703,8 @@
               <option value="В течение дня">В течение дня</option>
               <option value="custom">Указать свое время</option>
             </select>
-            <input type="text" id="customVisitTimeInput" class="hidden" placeholder="Например: после 17:00 или завтра к 14:30" style="margin-top: 12px;">
+            <input type="text" id="customVisitTimeInput" class="hidden"
+              placeholder="Например: после 17:00 или завтра к 14:30" style="margin-top: 12px;">
           </div>
 
           <button id="submitRequestBtn" class="primary-btn" type="submit">Отправить заявку</button>
@@ -708,7 +734,9 @@
       </p>
       <div class="modal-actions">
         <button type="button" id="closeConsultModalBtn" class="secondary-btn">Отмена</button>
-        <a href="https://wa.me/77002322567?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике." target="_blank" rel="noopener" class="primary-btn" id="confirmConsultBtn" style="text-decoration: none; text-align: center;">WhatsApp</a>
+        <a href="https://wa.me/77002322567?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике."
+          target="_blank" rel="noopener" class="primary-btn" id="confirmConsultBtn"
+          style="text-decoration: none; text-align: center;">WhatsApp</a>
       </div>
     </div>
   </div>
@@ -717,4 +745,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
