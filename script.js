@@ -113,7 +113,7 @@ async function sendEmailNotification({ selectedPrinters, serviceType, visitTime,
       || "Не указан";
 
     const printerLines = selectedPrinters
-      .map((printer) => `<li>${escapeHtml(printer.model || "Модель не указана")} (ID: ${escapeHtml(printer.id)})</li>`)
+      .map((printer) => `<li>${escapeHtml(printer.model || "Модель не указана")} | Картридж: ${escapeHtml(printer.cartridge_number || "Не указан")} (ID: ${escapeHtml(printer.id)})</li>`)
       .join("");
 
     const subject = `🔴 НОВАЯ ЗАЯВКА | ${serviceType} | ${clientName}`;
@@ -168,8 +168,39 @@ async function sendEmailNotification({ selectedPrinters, serviceType, visitTime,
   }
 }
 
-function generatePrinterId() {
-  return "PR-" + Math.floor(100 + Math.random() * 900);
+async function generatePrinterId() {
+  if (!supabaseClient && window.supabase) {
+    supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+  }
+  if (!supabaseClient) return "PR-" + Math.floor(1000 + Math.random() * 9000);
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("printers")
+      .select("id")
+      .ilike("id", "PR-%");
+    
+    if (error) throw error;
+    
+    if (!data || data.length === 0) {
+      return "PR-0001";
+    }
+    
+    let maxNum = 0;
+    for (const row of data) {
+      const match = row.id.match(/^PR-(\d+)$/i);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNum) maxNum = num;
+      }
+    }
+    
+    const nextNum = maxNum + 1;
+    return "PR-" + String(nextNum).padStart(4, "0");
+  } catch (err) {
+    console.error("Error generating sequential ID:", err);
+    return "PR-" + Math.floor(1000 + Math.random() * 9000);
+  }
 }
 
 // generator.html: admin/master QR generation.
@@ -183,7 +214,6 @@ if (orderForm) {
     const model = document.getElementById("modelInput")?.value.trim() || "";
     const cartridge = document.getElementById("cartridgeNumber")?.value.trim() || "Не указан";
     const address = document.getElementById("addressInput")?.value.trim() || "";
-    const printerId = generatePrinterId();
     const submitBtn = orderForm.querySelector('button[type="submit"]');
 
     if (!name || !phone || !model || !address) {
@@ -206,6 +236,8 @@ if (orderForm) {
         .upsert({ name, phone, address }, { onConflict: "phone" });
 
       if (clientError) throw clientError;
+
+      const printerId = await generatePrinterId();
 
       // Insert printer using both old and new schema fields
       const { error: printerError } = await supabaseClient
@@ -481,10 +513,11 @@ async function addPrinter() {
   setBusy(button, true, "Сохраняем...", "Сохранить");
 
   try {
+    const newId = await generatePrinterId();
     const result = await supabaseClient
       .from("printers")
       .insert({
-        id: generatePrinterId(),
+        id: newId,
         phone: clientPhone,
         model,
         cartridge_number: cartridge,
@@ -513,18 +546,21 @@ async function submitClientRequest(event) {
 
   const button = document.getElementById("submitRequestBtn");
   const checkedPrinters = Array.from(document.querySelectorAll('input[name="printerIds"]:checked'));
-  const serviceType = document.getElementById("selectedService")?.value || document.querySelector('input[name="serviceType"]:checked')?.value || "Замена картриджа";
+  const checkedServices = Array.from(document.querySelectorAll('input[name="serviceType"]:checked'));
+  const serviceType = checkedServices.length > 0 
+      ? checkedServices.map(input => input.value).join(", ") 
+      : "Замена картриджа";
   const selectedVisitTime = document.getElementById("visitTimeSelect")?.value || "В течение дня";
   const customVisitTime = document.getElementById("customVisitTimeInput")?.value.trim() || "";
   const visitTime = selectedVisitTime === "custom" ? (customVisitTime || "Не указано") : selectedVisitTime;
   const comment = document.getElementById("commentInput")?.value.trim() || "";
 
-  if (!checkedPrinters.length && serviceType !== "Консультация") {
+  if (!checkedPrinters.length && !serviceType.includes("Консультация")) {
     alert("Выберите хотя бы один принтер.");
     return;
   }
 
-  if (serviceType === "Консультация") {
+  if (serviceType.includes("Консультация") && checkedServices.length === 1) {
     const consultModal = document.getElementById("consultModal");
     if (consultModal) {
       consultModal.classList.remove("hidden");
@@ -588,15 +624,6 @@ async function initClientRequestApp() {
   const loading = document.getElementById("loadingState");
   const error = document.getElementById("errorState");
   const content = document.getElementById("mainContent");
-
-  document.querySelectorAll(".service-text").forEach(el => {
-    el.addEventListener("click", () => {
-      const hiddenInput = document.getElementById("selectedService");
-      if (hiddenInput) {
-        hiddenInput.value = el.textContent.trim();
-      }
-    });
-  });
 
   document.getElementById("addPrinterBtn")?.addEventListener("click", openModal);
   document.getElementById("closeModalBtn")?.addEventListener("click", closeModal);
@@ -670,7 +697,22 @@ async function loadPrintersWithHistory() {
 
     if (fetchError) throw fetchError;
 
+    // Fetch clients to get responsible person names
+    const { data: clientsData } = await supabaseClient
+      .from("clients")
+      .select("phone, name");
+
+    const phoneToNameMap = {};
+    if (clientsData) {
+      clientsData.forEach(c => {
+        if (c.phone) phoneToNameMap[c.phone] = c.name;
+      });
+    }
+
     allDashboardPrinters = printers || [];
+    allDashboardPrinters.forEach(p => {
+      p.client_name = phoneToNameMap[p.phone] || phoneToNameMap[p.client_phone] || "Не указано";
+    });
 
     renderDashboardPrinters(allDashboardPrinters);
     loadingEl?.classList.add("hidden");
@@ -747,6 +789,10 @@ function renderDashboardPrinters(printersList) {
         <div class="db-meta-row">
           <span class="meta-label">Телефоны:</span>
           <span class="meta-value text-bold">${escapeHtml(phones)}</span>
+        </div>
+        <div class="db-meta-row">
+          <span class="meta-label">Имя (Отв.):</span>
+          <span class="meta-value">${escapeHtml(printer.client_name || "Не указано")}</span>
         </div>
         <div class="db-meta-row">
           <span class="meta-label">Картридж:</span>
@@ -871,12 +917,14 @@ function initDashboardSearch() {
       const clientPhone = (printer.client_phone || "").toLowerCase();
       const cartridge = (printer.cartridge_number || "").toLowerCase();
       const location = (printer.location_note || printer.address || "").toLowerCase();
+      const clientName = (printer.client_name || "").toLowerCase();
       
       return name.includes(query) || 
              phone.includes(query) || 
              clientPhone.includes(query) || 
              cartridge.includes(query) || 
-             location.includes(query);
+             location.includes(query) ||
+             clientName.includes(query);
     });
 
     renderDashboardPrinters(filtered);

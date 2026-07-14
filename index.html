@@ -45,6 +45,17 @@
       line-height: 1.5;
     }
 
+    .top-banner-img {
+      display: block;
+      width: 100%;
+      height: 250px;
+      object-fit: cover;
+      margin-bottom: 24px;
+      border-radius: var(--radius-sm);
+      mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 75%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 75%, transparent 100%);
+    }
+
     button,
     input,
     textarea,
@@ -113,59 +124,10 @@
       font-weight: 800;
     }
 
-    .discount-banner {
-      background: var(--surface);
-      border: 1px solid var(--line);
-      border-radius: var(--radius-sm);
-      padding: 16px 24px;
-      margin-bottom: 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-    }
-
-    .discount-title {
-      color: var(--accent);
-      font-size: 1.1rem;
-      font-weight: 800;
-      margin-bottom: 8px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .discount-desc {
-      color: var(--text);
-      font-size: 0.85rem;
-      margin-bottom: 12px;
-    }
-
-    .discount-btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      padding: 10px 20px;
-      background: rgba(14, 165, 233, 0.15);
-      color: var(--accent);
-      border: 1px solid var(--accent);
-      border-radius: 12px;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 0.85rem;
-      transition: all 0.3s ease;
-      z-index: 1;
-    }
-
-    .discount-btn:hover {
-      background: var(--accent);
-      color: #FFFFFF;
-    }
-
     .hero-block {
       text-align: center;
-      margin-bottom: 32px;
-      padding: 24px 16px;
+      margin-bottom: 24px;
+      padding: 24px 16px 0;
     }
 
     .hero-title {
@@ -197,31 +159,32 @@
     .benefits-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 16px;
+      gap: 12px;
       text-align: left;
     }
 
     .benefit-item {
       display: flex;
+      flex-direction: column;
       align-items: flex-start;
-      gap: 12px;
+      gap: 8px;
       background: var(--surface);
-      padding: 16px;
+      padding: 12px 14px;
       border-radius: var(--radius-sm);
       border: 1px solid var(--line);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     }
 
     .benefit-icon {
-      font-size: 1.4rem;
+      font-size: 1.6rem;
       color: var(--accent);
     }
 
     .benefit-text {
-      font-size: 0.85rem;
+      font-size: 0.8rem;
       font-weight: 600;
       color: var(--text);
-      line-height: 1.4;
+      line-height: 1.3;
     }
 
     .status-card {
@@ -582,10 +545,6 @@
     }
 
     @media (max-width: 600px) {
-      .benefits-grid {
-        grid-template-columns: 1fr;
-      }
-
       .service-options {
         grid-template-columns: 1fr;
       }
@@ -600,13 +559,7 @@
 <body>
   <main id="clientRequestApp" class="app">
 
-    <div class="discount-banner">
-      <div class="discount-title">🎁 Скидка 10% для клиентов VAIRE Service</div>
-      <div class="discount-desc">На услуги VAIRE Print (Типография) и VAIRE Promotion (Реклама)</div>
-      <a class="discount-btn"
-        href="https://wa.me/77002322567?text=Здравствуйте!%20Хочу%20узнать%20подробности%20про%20скидку%2010%25%20для%20клиентов%20VAIRE%20Service"
-        target="_blank" rel="noopener">Узнать подробности в WhatsApp</a>
-    </div>
+    <img src="1234.png" alt="Banner" class="top-banner-img">
 
     <section class="card topbar">
       <div class="brand">
@@ -622,12 +575,13 @@
     <div class="hero-block">
       <div class="hero-title">Сервис по заправке картриджей</div>
       <div class="hero-slogan">ЗАПРАВКА БЕЗ ЗАБОТ</div>
-      <div class="hero-subtitle">Ваш принтер никогда не остановится. Приезжаем, меняем картридж и вы продолжаете
-        работать.</div>
-      <div class="benefits-grid">
-        <div class="benefit-item">
+      <div class="hero-subtitle">Приезжаем, меняем картридж и вы продолжаете работу.</div>
+    </div>
+
+    <div class="benefits-grid">
+      <div class="benefit-item">
           <div class="benefit-icon">🕒</div>
-          <div class="benefit-text">Быстрый выезд<br>в день обращения</div>
+          <div class="benefit-text">Быстрый выезд<br>в день заявки</div>
         </div>
         <div class="benefit-item">
           <div class="benefit-icon">🖨</div>
@@ -642,50 +596,36 @@
           <div class="benefit-text">Гарантия качества<br>на все услуги</div>
         </div>
       </div>
-    </div>
 
-    <div class="hero-block" style="padding-top: 0;">
-      <div class="hero-title">КАК МЫ РАБОТАЕМ</div>
-      <div class="hero-slogan" style="font-size: 1.8rem; margin-bottom: 24px;">Всё просто и удобно</div>
+    <div class="hero-block" style="padding-top: 32px;">
+      <div class="hero-title" style="color: #FFFFFF;">КАК МЫ РАБОТАЕМ</div>
       <div class="benefits-grid">
         <div class="benefit-item">
           <div class="benefit-icon">📱</div>
           <div class="benefit-text">
-            <span
-              style="display: block; color: var(--text); font-size: 0.95rem; font-weight: 800; margin-bottom: 4px;">1.
-              Вы оставляете заявку</span>
-            <span style="color: var(--muted); font-weight: 500; font-size: 0.85rem;">Выберите принтер и удобное время
-              прямо на сайте или напишите в WhatsApp.</span>
+            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;">1. Заявка</span>
+            <span style="color: var(--muted); font-size: 0.75rem;">Заказ на сайте или WhatsApp</span>
           </div>
         </div>
         <div class="benefit-item">
           <div class="benefit-icon">🚗</div>
           <div class="benefit-text">
-            <span
-              style="display: block; color: var(--text); font-size: 0.95rem; font-weight: 800; margin-bottom: 4px;">2.
-              Мы приезжаем</span>
-            <span style="color: var(--muted); font-weight: 500; font-size: 0.85rem;">Мастер выезжает к вам в офис в
-              указанное время.</span>
+            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;">2. Выезд</span>
+            <span style="color: var(--muted); font-size: 0.75rem;">Мастер едет к вам</span>
           </div>
         </div>
         <div class="benefit-item">
           <div class="benefit-icon">🖨</div>
           <div class="benefit-text">
-            <span
-              style="display: block; color: var(--text); font-size: 0.95rem; font-weight: 800; margin-bottom: 4px;">3.
-              Меняем картридж</span>
-            <span style="color: var(--muted); font-weight: 500; font-size: 0.85rem;">Ставим готовый заправленный
-              картридж за 3-5 минут без простоя работы.</span>
+            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;">3. Замена</span>
+            <span style="color: var(--muted); font-size: 0.75rem;">Меняем картридж за 3-5 мин</span>
           </div>
         </div>
         <div class="benefit-item">
           <div class="benefit-icon">✅</div>
           <div class="benefit-text">
-            <span
-              style="display: block; color: var(--text); font-size: 0.95rem; font-weight: 800; margin-bottom: 4px;">4.
-              Вы продолжаете работать</span>
-            <span style="color: var(--muted); font-weight: 500; font-size: 0.85rem;">Забираем ваш пустой картридж на
-              заправку.</span>
+            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;">4. Работаем</span>
+            <span style="color: var(--muted); font-size: 0.75rem;">Вы продолжаете печать</span>
           </div>
         </div>
       </div>
@@ -712,19 +652,18 @@
           </div>
 
           <div class="panel">
-            <div class="panel-title">2. Выберите услугу или действие</div>
-            <div class="service-options" role="radiogroup" aria-label="Тип услуги">
-              <input type="hidden" id="selectedService" value="Нужна замена картриджа">
+            <div class="panel-title">2. Выберите услугу (можно несколько)</div>
+            <div class="service-options" role="group" aria-label="Тип услуги">
               <label class="service-option">
-                <input type="radio" name="serviceType" value="Замена картриджа" checked>
+                <input type="checkbox" name="serviceType" value="Замена картриджа" checked>
                 <span class="service-text">Нужна замена картриджа</span>
               </label>
               <label class="service-option">
-                <input type="radio" name="serviceType" value="Ремонт">
+                <input type="checkbox" name="serviceType" value="Ремонт">
                 <span class="service-text">Принтер сломался / Ремонт</span>
               </label>
               <label class="service-option">
-                <input type="radio" name="serviceType" value="Консультация">
+                <input type="checkbox" name="serviceType" value="Консультация">
                 <span class="service-text">Консультация</span>
               </label>
               <button type="button" id="addPrinterBtn" class="add-printer-tile service-text">+ Добавить новый
