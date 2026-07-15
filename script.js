@@ -1,7 +1,7 @@
 const SUPABASE_BASE_URL = "https://wxkqfkjaretsqzdfnzhw.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind4a3Fma2phcmV0c3F6ZGZuemh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MDM1NTMsImV4cCI6MjA5OTI3OTU1M30.7ztRTIZM9ytG9LLCFE5pvVTEpV9re5IrxIomMrJxVKw";
 const TELEGRAM_BOT_TOKEN = "8998606162:AAE_prALU6AkZqWQ_bQV4mjXNqaji1Uw-rk";
-const TELEGRAM_CHAT_ID = "935909798";
+const TELEGRAM_CHAT_ID = "-1003811452631";
 
 let clientPhone = "";
 let clientData = null;
