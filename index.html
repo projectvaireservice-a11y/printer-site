@@ -779,6 +779,51 @@
     .modal { background: var(--surface); }
     .modal p { color: var(--muted) !important; }
 
+    .whatsapp-float {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 90;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: 270px;
+      padding: 9px 10px 9px 15px;
+      border-radius: 14px;
+      color: #ffffff;
+      background: #168b4b;
+      box-shadow: 0 10px 26px rgba(22, 139, 75, .28);
+      text-decoration: none;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .whatsapp-float:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(22, 139, 75, .38); }
+    .whatsapp-float-icon { display: grid; flex: 0 0 34px; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: rgba(255,255,255,.16); }
+    .whatsapp-float-icon svg { width: 21px; height: 21px; }
+
+    /* WhatsApp stays visible above every section while the page scrolls. */
+    .whatsapp-float,
+    .whatsapp-float:is(:link, :visited) {
+      position: fixed !important;
+      right: 20px !important;
+      bottom: 20px !important;
+      z-index: 9999 !important;
+      display: grid !important;
+      place-items: center;
+      visibility: visible !important;
+      opacity: 1 !important;
+      pointer-events: auto !important;
+      width: 52px;
+      height: 52px;
+      min-height: 52px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      color: #ffffff !important;
+      background: #168b4b !important;
+      text-decoration: none !important;
+      box-shadow: 0 10px 28px rgba(0, 0, 0, .24);
+    }
+
     @media (max-width: 600px) {
       body { padding-left: 8px; padding-right: 8px; }
       .top-banner-img { height: 195px; margin-bottom: 10px; border-radius: 12px; }
@@ -801,6 +846,10 @@
       .office-label { font-size: .66rem; }
       .office-copy strong { font-size: .82rem; }
       .office-copy > span:last-child { font-size: .68rem; }
+      .whatsapp-float,
+      .whatsapp-float:is(:link, :visited) { right: 14px !important; bottom: 14px !important; width: 48px; height: 48px; min-height: 48px; border-radius: 50%; }
+      .whatsapp-float-icon { flex-basis: 30px; width: 30px; height: 30px; }
+      .whatsapp-float-icon svg { width: 19px; height: 19px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -911,7 +960,7 @@
           <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text">
             <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_1">1. Заявка</span>
-            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_1_desc">Заказ на сайте или WhatsApp</span>
+            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_1_desc">Заказ на сайте</span>
           </div>
         </div>
         <div class="benefit-item">
@@ -925,7 +974,7 @@
           <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text">
             <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_3">3. Замена</span>
-            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_3_desc">Меняем картридж за 3-5 мин</span>
+            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_3_desc">Мастер выполнит работы в удобное для вас время.</span>
           </div>
         </div>
         <div class="benefit-item">
@@ -948,6 +997,10 @@
     </section>
   </main>
 
+  <a class="whatsapp-float" href="https://wa.me/77028054237?text=Здравствуйте!%20У%20меня%20есть%20вопрос%20по%20принтеру%20или%20картриджу." target="_blank" rel="noopener" aria-label="Открыть чат" title="Открыть чат">
+    <span class="whatsapp-float-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.5 11.8a8.5 8.5 0 0 1-12.7 7.4L3.5 20.5l1.4-4.1A8.5 8.5 0 1 1 20.5 11.8Z"/><path d="M8.3 8.1c.2-.4.4-.4.7-.4h.5c.2 0 .4.1.5.4l.7 1.7c.1.2.1.4-.1.6l-.5.6c-.1.1-.1.3 0 .5.3.6 1.2 1.8 2.8 2.4.2.1.4.1.5-.1l.6-.7c.1-.2.3-.2.5-.1l1.7.8c.2.1.3.3.2.5-.2.7-.9 1.3-1.7 1.4-1.2.1-3-.6-4.5-2.1-1.4-1.4-2.1-3-2-4.1 0-.6.3-1.1.6-1.5Z"/></svg></span>
+  </a>
+
   <div id="addPrinterModal" class="modal-backdrop hidden" aria-hidden="true">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="addPrinterTitle">
       <h2 id="addPrinterTitle" data-i18n="modal_add_printer">Добавить принтер</h2>
@@ -965,13 +1018,13 @@
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="consultModalTitle">
       <h2 id="consultModalTitle" data-i18n="modal_consult">Консультация с мастером</h2>
       <p style="margin: 10px 0 24px; color: var(--muted); font-size: 0.95rem; line-height: 1.5;" data-i18n="consult_desc">
-        Желаете перейти в WhatsApp для личной консультации с мастером?
+        Связаться с мастером?
       </p>
       <div class="modal-actions">
         <button type="button" id="closeConsultModalBtn" class="secondary-btn" data-i18n="cancel">Отмена</button>
         <a href="https://wa.me/77028054237?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике."
           target="_blank" rel="noopener" class="primary-btn" id="confirmConsultBtn"
-          style="text-decoration: none; text-align: center;">WhatsApp</a>
+          style="text-decoration: none; text-align: center;">Открыть чат</a>
       </div>
     </div>
   </div>
@@ -1006,7 +1059,7 @@ const fallbackTranslations = {
     step_2: "Подтверждение",
     step_2_desc: "Мы получим заявку и свяжемся с вами.",
     step_3: "Обслуживание",
-    step_3_desc: "Мастер выполнит работы в удобное время.",
+    step_3_desc: "Мастер выполнит работы в удобное для вас время.",
     step_4: "4. Работаем",
     step_4_desc: "Вы продолжаете печать",
     loading_client: "Загружаем данные клиента...",
@@ -1037,7 +1090,7 @@ const fallbackTranslations = {
     saving: "Сохраняем...",
     sending: "Отправляем...",
     modal_consult: "Консультация с мастером",
-    consult_desc: "Желаете перейти в WhatsApp для личной консультации с мастером?",
+    consult_desc: "Связаться с мастером?",
     success_toast: "Заявка успешно принята!",
     empty_printers: "Принтеров пока нет. Добавьте первый принтер, чтобы создать заявку.",
     unknown_model: "Модель не указана",
@@ -1080,7 +1133,7 @@ const fallbackTranslations = {
     step_2: "Растау",
     step_2_desc: "Өтінімді қабылдап, сізбен хабарласамыз.",
     step_3: "Қызмет көрсету",
-    step_3_desc: "Маман ыңғайлы уақытта жұмысты орындайды.",
+    step_3_desc: "Маман сізге ыңғайлы уақытта жұмысты орындайды.",
     step_4: "4. Жұмыс",
     step_4_desc: "Сіз басып шығаруды жалғастырасыз",
     loading_client: "Клиент деректері жүктелуде...",
@@ -1111,7 +1164,7 @@ const fallbackTranslations = {
     saving: "Сақталуда...",
     sending: "Жіберілуде...",
     modal_consult: "Маманнан кеңес алу",
-    consult_desc: "Маманмен жеке кеңесу үшін WhatsApp-қа өтесіз бе?",
+    consult_desc: "Маманмен байланысасыз ба?",
     success_toast: "Өтінім сәтті қабылданды!",
     empty_printers: "Әзірге принтер жоқ. Өтінім жасау үшін бірінші принтерді қосыңыз.",
     unknown_model: "Модель көрсетілмеген",
