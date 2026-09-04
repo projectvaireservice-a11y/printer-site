@@ -692,7 +692,7 @@
     #clientRequestApp > .office-card { order: 4; }
 
     .top-banner-img {
-      height: 495px;
+      height: 345px;
       margin-bottom: 12px;
       border-radius: 14px;
       mask-image: linear-gradient(to bottom, #000 0%, #000 90%, transparent 100%);
@@ -715,8 +715,7 @@
     .site-header.header-hidden { opacity: 0; transform: translateY(-24px); pointer-events: none; }
     .site-header .brand-logo { height: 32px; width: auto; }
     .site-header .brand { flex: 1 1 auto; min-width: 0; gap: 8px; }
-    .site-header .brand-company { color: var(--text); font-size: .88rem; font-weight: 800; letter-spacing: .06em; white-space: nowrap; }
-    .site-header .brand-name { color: var(--text); font-size: .9rem; }
+    .site-header .brand-name { color: var(--text); font-size: .84rem; }
     .site-header .hello { margin-left: 0; }
     .site-header .hello span { color: var(--muted); }
     .site-header .hello strong { color: var(--text); }
@@ -828,15 +827,14 @@
 
     @media (max-width: 600px) {
       body { padding-left: 8px; padding-right: 8px; }
-      .top-banner-img { height: 440px; margin-bottom: 10px; border-radius: 12px; }
+      .top-banner-img { height: 290px; margin-bottom: 10px; border-radius: 12px; }
       .site-header { top: 5px; padding: 9px 10px !important; border-radius: 11px; }
       .site-header .brand { gap: 7px; }
       .site-header .brand-logo { height: 28px; max-width: 100px; }
       .site-header .brand-name { display: none; }
-      .site-header .brand-company { font-size: .72rem; letter-spacing: .035em; }
       .site-header .hello { max-width: 122px; min-width: 88px; padding-right: 0; }
       .site-header .hello span { font-size: .6rem; }
-      .site-header .hello strong { font-size: .72rem; line-height: 1.25; }
+      .site-header .hello strong { font-size: .68rem; line-height: 1.25; }
       .lang-switcher { gap: 5px; font-size: .75rem; }
       .theme-toggle { flex-basis: 32px; width: 32px; height: 32px; }
       .form-card { padding: 17px 13px; }
@@ -859,6 +857,11 @@
       *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
     }
   </style>
+
+  <style id="final-photo-size">
+    .top-banner-img { height: 345px !important; }
+    @media (max-width: 600px) { .top-banner-img { height: 290px !important; } }
+  </style>
 </head>
 
 <body>
@@ -868,8 +871,7 @@
 
     <section class="card topbar site-header" style="margin-bottom: 12px;">
       <div class="brand">
-        <img class="brand-logo" src="123.png" alt="VAIRE GROUP">
-        <span class="brand-company">VAIRE GROUP</span>
+        <img class="brand-logo" src="123.png" alt="">
         <span class="brand-name">VAIRE SERVICE</span>
       </div>
       <div class="lang-switcher" aria-label="Language switcher">
