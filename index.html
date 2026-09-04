@@ -614,6 +614,32 @@
         font-size: 1.8rem;
       }
     }
+
+    /* порядок страницы: фото → форма → справочная информация */
+    #clientRequestApp {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #clientRequestApp > .top-banner-img { order: 1; }
+    #clientRequestApp > #loadingState,
+    #clientRequestApp > #errorState { order: 2; }
+    #clientRequestApp > #mainContent { order: 3; }
+    #clientRequestApp > .topbar { order: 4; }
+    #clientRequestApp > .topbar + .topbar { order: 5; }
+    #clientRequestApp > .hero-block { order: 6; }
+    #clientRequestApp > .benefits-grid { order: 7; }
+    #clientRequestApp > .benefits-grid + .hero-block { order: 8; }
+
+    /* после формы оставляем только полезные сведения */
+    .hello span,
+    .hero-slogan,
+    .hero-subtitle,
+    .benefit-icon,
+    .topbar + .topbar > div:first-child { display: none; }
+    #clientRequestApp > .benefits-grid { display: none; }
+    .hero-block { margin-top: 22px; }
+    .hero-block[style] { margin-top: 10px; }
   </style>
 </head>
 
@@ -639,7 +665,7 @@
     </section>
 
     <section class="card topbar" style="justify-content: flex-start; gap: 16px;">
-      <div style="font-size: 1.8rem;">📍</div>
+      <div aria-hidden="true"></div>
       <div style="display: flex; flex-direction: column; gap: 4px; text-align: left;">
         <span style="color: var(--accent); font-weight: 800; font-size: 0.85rem; text-transform: uppercase;" data-i18n="office_schedule">Офис и график работы</span>
         <span style="color: #FACC15; font-weight: 800; font-size: 0.95rem;" data-i18n="office_time">Ежедневно</span>
@@ -655,19 +681,19 @@
 
     <div class="benefits-grid">
       <div class="benefit-item">
-          <div class="benefit-icon">🕒</div>
+          <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text" data-i18n="benefit_1">Быстрый выезд<br>в день заявки</div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">🖨</div>
+          <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text" data-i18n="benefit_2">Замена картриджа<br>за 3-5 минут</div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">🔄</div>
+          <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text" data-i18n="benefit_3">Обменный фонд<br>всегда в наличии</div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">🛡</div>
+          <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text" data-i18n="benefit_4">Гарантия качества<br>на все услуги</div>
         </div>
       </div>
@@ -676,28 +702,28 @@
       <div class="hero-title" style="color: #FFFFFF;" data-i18n="how_we_work">КАК МЫ РАБОТАЕМ</div>
       <div class="benefits-grid">
         <div class="benefit-item">
-          <div class="benefit-icon">📱</div>
+          <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text">
             <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_1">1. Заявка</span>
             <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_1_desc">Заказ на сайте или WhatsApp</span>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">🚗</div>
+          <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text">
             <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_2">2. Выезд</span>
             <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_2_desc">Мастер едет к вам</span>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">🖨</div>
+          <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text">
             <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_3">3. Замена</span>
             <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_3_desc">Меняем картридж за 3-5 мин</span>
           </div>
         </div>
         <div class="benefit-item">
-          <div class="benefit-icon">✅</div>
+          <div class="benefit-icon" aria-hidden="true"></div>
           <div class="benefit-text">
             <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_4">4. Работаем</span>
             <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_4_desc">Вы продолжаете печать</span>
