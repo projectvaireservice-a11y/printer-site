@@ -7,7 +7,7 @@
   <title>Заявка на обслуживание принтера</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     *,
@@ -639,6 +639,173 @@
     #clientRequestApp > .benefits-grid { display: none; }
     .hero-block { margin-top: 22px; }
     .hero-block[style] { margin-top: 10px; }
+
+    /* VAIRE Service — compact serious client layout */
+    :root {
+      --bg: #f5f7fa;
+      --surface: #ffffff;
+      --surface-soft: #eef2f6;
+      --text: #111827;
+      --muted: #6b7280;
+      --line: #d9e0e8;
+      --accent: #195dcc;
+      --accent-hover: #104da9;
+      --radius: 14px;
+      --radius-sm: 10px;
+    }
+
+    body.theme-dark {
+      --bg: #0b0d10;
+      --surface: #15181d;
+      --surface-soft: #1b2027;
+      --text: #f1f4f8;
+      --muted: #a0a9b6;
+      --line: #2b323c;
+      --accent: #6c98ec;
+      --accent-hover: #88adf3;
+    }
+
+    body,
+    .card,
+    .status-card,
+    .panel,
+    .printer-item,
+    .service-option span,
+    .add-printer-tile,
+    .field textarea,
+    .field select,
+    .field input,
+    .modal,
+    .secondary-btn,
+    .office-card {
+      transition: background-color .24s ease, color .24s ease, border-color .24s ease, box-shadow .24s ease;
+    }
+
+    body { background: var(--bg); color: var(--text); padding: max(10px, env(safe-area-inset-top)) 12px max(22px, env(safe-area-inset-bottom)); }
+    #clientRequestApp { max-width: 760px; }
+    #clientRequestApp > .top-banner-img { order: 0; }
+    #clientRequestApp > .site-header { order: 1; }
+    #clientRequestApp > #loadingState,
+    #clientRequestApp > #errorState,
+    #clientRequestApp > #mainContent { order: 2; }
+    #clientRequestApp > .how-work-section { order: 3; }
+    #clientRequestApp > .office-card { order: 4; }
+
+    .top-banner-img {
+      height: 245px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      mask-image: linear-gradient(to bottom, #000 0%, #000 90%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 90%, transparent 100%);
+    }
+
+    .site-header {
+      position: sticky;
+      top: max(6px, env(safe-area-inset-top));
+      z-index: 50;
+      padding: 11px 14px !important;
+      margin-bottom: 12px !important;
+      border-radius: 14px;
+      background: color-mix(in srgb, var(--surface) 94%, transparent);
+      backdrop-filter: blur(14px);
+      transform: translateY(0);
+      opacity: 1;
+      transition: opacity .3s ease, transform .3s ease, background-color .24s ease;
+    }
+    .site-header.header-hidden { opacity: 0; transform: translateY(-24px); pointer-events: none; }
+    .site-header .brand-logo { height: 32px; width: auto; }
+    .site-header .brand-name { color: var(--text); font-size: .9rem; }
+    .site-header .hello { margin-left: 0; }
+    .site-header .hello span { color: var(--muted); }
+    .site-header .hello strong { color: var(--text); }
+    .lang-switcher { margin-left: auto; }
+
+    .theme-toggle {
+      display: grid;
+      flex: 0 0 36px;
+      place-items: center;
+      width: 36px;
+      height: 36px;
+      padding: 0;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      color: var(--text);
+      background: var(--surface-soft);
+      cursor: pointer;
+    }
+    .theme-toggle:hover { border-color: var(--accent); }
+    .theme-icon { width: 17px; height: 17px; }
+    .theme-icon-sun { display: none; }
+    body.theme-dark .theme-icon-moon { display: none; }
+    body.theme-dark .theme-icon-sun { display: block; }
+
+    #mainContent { width: 100%; }
+    .form-card { padding: 22px 20px; border-radius: 14px; background: var(--surface); }
+    .section-title { font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.9rem; letter-spacing: -.025em; margin-bottom: 18px; }
+    .section-title::before { width: 3px; height: 25px; border-radius: 2px; }
+    .panel { padding: 15px; margin-bottom: 14px; background: var(--surface-soft); border-radius: 11px; }
+    .panel-title { font-size: .9rem; margin-bottom: 11px; }
+    .printer-list { gap: 8px; }
+    .printer-item { padding: 11px 12px; border-radius: 10px; background: var(--surface); }
+    .printer-name { font-size: .86rem; }
+    .printer-meta { font-size: .72rem; }
+    .service-options { gap: 8px; }
+    .service-option span, .add-printer-tile { min-height: 48px; padding: 9px; border-radius: 10px; font-size: .78rem; }
+    .field { margin-bottom: 15px; }
+    .field label { font-size: .78rem; margin-bottom: 6px; }
+    .field textarea, .field select, .field input, .modal input { padding: 11px 12px; border-radius: 10px; background: var(--surface); color: var(--text); font-size: .84rem; }
+    .field textarea { min-height: 78px; }
+    .primary-btn { min-height: 48px; border-radius: 10px; font-size: .88rem; }
+    .secondary-btn { min-height: 42px; border-radius: 10px; }
+
+    .status-card { margin: 12px 0 0; padding: 13px 15px; border-radius: 11px; background: var(--surface); border: 1px solid var(--line); }
+    .status-label { font-size: .68rem; }
+    .status-value { font-size: .82rem; }
+
+    .how-work-section { margin-top: 14px; padding: 18px 16px 4px !important; text-align: left; }
+    .how-work-section > .hero-title { margin-bottom: 12px; color: var(--text) !important; font-family: "Cormorant Garamond", Georgia, serif; font-size: 1.55rem; letter-spacing: 0; text-transform: none; }
+    .how-work-section .benefits-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .how-work-section .benefit-item { gap: 5px; padding: 11px 12px; border-radius: 10px; background: var(--surface); }
+    .how-work-section .benefit-icon { display: none; }
+    .how-work-section .benefit-text { color: var(--text); font-size: .76rem; }
+    .how-work-section .benefit-text span { color: var(--muted) !important; font-size: .68rem !important; }
+    .how-work-section .benefit-text span:first-child { color: var(--text) !important; font-size: .78rem !important; }
+
+    .office-card { display: block; margin: 12px 0 0; padding: 14px 16px; border-radius: 11px; background: var(--surface); }
+    .office-copy { display: grid; gap: 3px; }
+    .office-label { color: var(--accent); font-size: .73rem; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+    .office-copy strong { color: var(--text); font-size: .88rem; }
+    .office-copy > span:last-child { color: var(--muted); font-size: .74rem; }
+    .modal { background: var(--surface); }
+    .modal p { color: var(--muted) !important; }
+
+    @media (max-width: 600px) {
+      body { padding-left: 8px; padding-right: 8px; }
+      .top-banner-img { height: 195px; margin-bottom: 10px; border-radius: 12px; }
+      .site-header { top: 5px; padding: 9px 10px !important; border-radius: 11px; }
+      .site-header .brand { gap: 7px; }
+      .site-header .brand-logo { height: 28px; max-width: 100px; }
+      .site-header .brand-name { display: none; }
+      .site-header .hello { max-width: 122px; min-width: 88px; padding-right: 0; }
+      .site-header .hello span { font-size: .6rem; }
+      .site-header .hello strong { font-size: .72rem; line-height: 1.25; }
+      .lang-switcher { gap: 5px; font-size: .75rem; }
+      .theme-toggle { flex-basis: 32px; width: 32px; height: 32px; }
+      .form-card { padding: 17px 13px; }
+      .section-title { font-size: 1.65rem; margin-bottom: 15px; }
+      .panel { padding: 12px; }
+      .service-options { grid-template-columns: 1fr; }
+      .service-option span, .add-printer-tile { min-height: 42px; }
+      .how-work-section .benefits-grid { grid-template-columns: 1fr; }
+      .office-card { padding: 12px 13px; }
+      .office-label { font-size: .66rem; }
+      .office-copy strong { font-size: .82rem; }
+      .office-copy > span:last-child { font-size: .68rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
   </style>
 </head>
 
@@ -647,7 +814,7 @@
 
     <img src="1234.png" alt="Banner" class="top-banner-img">
 
-    <section class="card topbar" style="margin-bottom: 12px;">
+    <section class="card topbar site-header" style="margin-bottom: 12px;">
       <div class="brand">
         <img class="brand-logo" src="123.png" alt="VAIRE GROUP">
         <span class="brand-name">VAIRE SERVICE</span>
@@ -657,90 +824,23 @@
         <span style="color: var(--line); cursor: default;">|</span>
         <span id="lang-kk" data-lang="kk" onclick="setLang('kk')">KZ</span>
       </div>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Переключить тему" title="Переключить тему">
+        <svg class="theme-icon theme-icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20.5 15.4A8.5 8.5 0 0 1 8.6 3.5 8.5 8.5 0 1 0 20.5 15.4Z"/></svg>
+        <svg class="theme-icon theme-icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.65 17.65l1.42 1.42M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.65 6.35l1.42-1.42"/></svg>
+      </button>
       <div class="hello">
         <span data-i18n="greeting_title">Приветствие</span>
         <strong id="clientGreeting" data-i18n="greeting_default">Здравствуйте!</strong>
       </div>
     </section>
 
-    <section class="card topbar" style="justify-content: flex-start; gap: 16px;">
-      <div aria-hidden="true"></div>
-      <div style="display: flex; flex-direction: column; gap: 4px; text-align: left;">
-        <span style="color: var(--accent); font-weight: 800; font-size: 0.85rem; text-transform: uppercase;" data-i18n="office_schedule">Офис и график работы</span>
-        <span style="color: #FACC15; font-weight: 800; font-size: 0.95rem;" data-i18n="office_time">Ежедневно</span>
-        <span style="color: var(--muted); font-size: 0.85rem; font-weight: 500;" data-i18n="office_address">Богенбай батыра 23, 2-й этаж, 1-3 кабинет</span>
-      </div>
-    </section>
 
-    <div class="hero-block">
-      <div class="hero-title" data-i18n="hero_title">Сервис по заправке картриджей</div>
-      <div class="hero-slogan" data-i18n="hero_slogan">ЗАПРАВКА БЕЗ ЗАБОТ</div>
-      <div class="hero-subtitle" data-i18n="hero_subtitle">Приезжаем, меняем картридж и вы продолжаете работу.</div>
-    </div>
-
-    <div class="benefits-grid">
-      <div class="benefit-item">
-          <div class="benefit-icon" aria-hidden="true"></div>
-          <div class="benefit-text" data-i18n="benefit_1">Быстрый выезд<br>в день заявки</div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-icon" aria-hidden="true"></div>
-          <div class="benefit-text" data-i18n="benefit_2">Замена картриджа<br>за 3-5 минут</div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-icon" aria-hidden="true"></div>
-          <div class="benefit-text" data-i18n="benefit_3">Обменный фонд<br>всегда в наличии</div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-icon" aria-hidden="true"></div>
-          <div class="benefit-text" data-i18n="benefit_4">Гарантия качества<br>на все услуги</div>
-        </div>
-      </div>
-
-    <div class="hero-block" style="padding-top: 32px;">
-      <div class="hero-title" style="color: #FFFFFF;" data-i18n="how_we_work">КАК МЫ РАБОТАЕМ</div>
-      <div class="benefits-grid">
-        <div class="benefit-item">
-          <div class="benefit-icon" aria-hidden="true"></div>
-          <div class="benefit-text">
-            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_1">1. Заявка</span>
-            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_1_desc">Заказ на сайте или WhatsApp</span>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-icon" aria-hidden="true"></div>
-          <div class="benefit-text">
-            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_2">2. Выезд</span>
-            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_2_desc">Мастер едет к вам</span>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-icon" aria-hidden="true"></div>
-          <div class="benefit-text">
-            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_3">3. Замена</span>
-            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_3_desc">Меняем картридж за 3-5 мин</span>
-          </div>
-        </div>
-        <div class="benefit-item">
-          <div class="benefit-icon" aria-hidden="true"></div>
-          <div class="benefit-text">
-            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_4">4. Работаем</span>
-            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_4_desc">Вы продолжаете печать</span>
-          </div>
-        </div>
-      </div>
-    </div>
 
     <div id="loadingState" class="card loading" data-i18n="loading_client">Загружаем данные клиента...</div>
     <div id="errorState" class="card error hidden" data-i18n="load_error">Не удалось загрузить данные. Проверьте ссылку с номером телефона.
     </div>
 
     <div id="mainContent" class="hidden">
-
-      <section class="status-card">
-        <div class="status-label" data-i18n="last_request">Последняя заявка</div>
-        <div id="lastRequestStatus" class="status-value" data-i18n="no_info">Информация отсутствует</div>
-      </section>
 
       <section class="card form-card">
         <h1 class="section-title" data-i18n="leave_request">Оставить заявку</h1>
@@ -797,7 +897,55 @@
           <button id="submitRequestBtn" class="primary-btn" type="submit" data-i18n="send_request">Отправить заявку</button>
         </form>
       </section>
+
+      <section class="status-card">
+        <div class="status-label" data-i18n="last_request">Последняя заявка</div>
+        <div id="lastRequestStatus" class="status-value" data-i18n="no_info">Информация отсутствует</div>
+      </section>
     </div>
+
+    <div class="hero-block how-work-section" style="padding-top: 32px;">
+      <div class="hero-title" style="color: #FFFFFF;" data-i18n="how_we_work">КАК МЫ РАБОТАЕМ</div>
+      <div class="benefits-grid">
+        <div class="benefit-item">
+          <div class="benefit-icon" aria-hidden="true"></div>
+          <div class="benefit-text">
+            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_1">1. Заявка</span>
+            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_1_desc">Заказ на сайте или WhatsApp</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon" aria-hidden="true"></div>
+          <div class="benefit-text">
+            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_2">2. Выезд</span>
+            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_2_desc">Мастер едет к вам</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon" aria-hidden="true"></div>
+          <div class="benefit-text">
+            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_3">3. Замена</span>
+            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_3_desc">Меняем картридж за 3-5 мин</span>
+          </div>
+        </div>
+        <div class="benefit-item">
+          <div class="benefit-icon" aria-hidden="true"></div>
+          <div class="benefit-text">
+            <span style="display: block; font-size: 0.9rem; font-weight: 800; margin-bottom: 2px;" data-i18n="step_4">4. Работаем</span>
+            <span style="color: var(--muted); font-size: 0.75rem;" data-i18n="step_4_desc">Вы продолжаете печать</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <section class="card office-card" aria-label="График работы">
+      <div class="office-copy">
+        <span class="office-label" data-i18n="office_schedule">Офис и график работы</span>
+        <strong data-i18n="office_time">Ежедневно</strong>
+        <span data-i18n="office_address">Богенбай батыр 23, 2-й этаж, 1-3 кабинет</span>
+      </div>
+    </section>
   </main>
 
   <div id="addPrinterModal" class="modal-backdrop hidden" aria-hidden="true">
@@ -821,7 +969,7 @@
       </p>
       <div class="modal-actions">
         <button type="button" id="closeConsultModalBtn" class="secondary-btn" data-i18n="cancel">Отмена</button>
-        <a href="https://wa.me/77002322567?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике."
+        <a href="https://wa.me/77028054237?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике."
           target="_blank" rel="noopener" class="primary-btn" id="confirmConsultBtn"
           style="text-decoration: none; text-align: center;">WhatsApp</a>
       </div>
@@ -830,8 +978,1357 @@
 
   <div id="successToast" class="toast hidden" data-i18n="success_toast">Заявка успешно принята!</div>
 
-  <script src="translations.js"></script>
-  <script src="script.js"></script>
+  <script>
+let translations = {};
+
+const fallbackTranslations = {
+  ru: {
+    page_title: "Заявка на обслуживание принтера",
+    request_form_label: "Обслуживание техники",
+    request_form_note: "Выберите технику и нужную услугу. Заявка сразу поступит в сервис.",
+    greeting_title: "Приветствие",
+    greeting_default: "Здравствуйте!",
+    greeting: "Здравствуйте",
+    client: "клиент",
+    office_schedule: "Офис и график работы",
+    office_time: "Ежедневно",
+    office_address: "Богенбай батыр 23, 2-й этаж, 1-3 кабинет",
+    hero_title: "Сервис по заправке картриджей",
+    hero_slogan: "Заправка без забот",
+    hero_subtitle: "Приезжаем, меняем картридж, и вы продолжаете работу.",
+    benefit_1: "Быстрый выезд<br>в день заявки",
+    benefit_2: "Замена картриджа<br>за 3-5 минут",
+    benefit_3: "Обменный фонд<br>всегда в наличии",
+    benefit_4: "Гарантия качества<br>на все услуги",
+    how_we_work: "Как это работает",
+    step_1: "Заявка",
+    step_1_desc: "Выберите технику и услугу.",
+    step_2: "Подтверждение",
+    step_2_desc: "Мы получим заявку и свяжемся с вами.",
+    step_3: "Обслуживание",
+    step_3_desc: "Мастер выполнит работы в удобное время.",
+    step_4: "4. Работаем",
+    step_4_desc: "Вы продолжаете печать",
+    loading_client: "Загружаем данные клиента...",
+    load_error: "Не удалось загрузить данные. Проверьте ссылку с номером телефона.",
+    last_request: "Последняя заявка",
+    no_info: "Информация отсутствует",
+    no_requests: "Заявок пока нет",
+    request: "Заявка",
+    time_not_set: "Время не указано",
+    leave_request: "Оставить заявку",
+    step1_title: "Выберите принтер",
+    step2_title: "Выберите услугу",
+    service_refill: "Нужна замена картриджа",
+    service_repair: "Принтер сломался / ремонт",
+    service_consult: "Консультация",
+    add_printer: "Добавить принтер",
+    step3_title: "Комментарий",
+    comment_placeholder: "Опишите проблему, удобный вход или дополнительные детали",
+    step4_title: "Удобное время выезда",
+    custom_time_placeholder: "Например: после 17:00 или завтра к 14:30",
+    send_request: "Отправить заявку",
+    modal_add_printer: "Добавить принтер",
+    printer_model_placeholder: "Модель принтера, например Canon LBP6030",
+    cartridge_placeholder: "Номер картриджа, например CF259A",
+    location_placeholder: "Кабинет или адрес, например каб. 104",
+    cancel: "Отмена",
+    save: "Сохранить",
+    saving: "Сохраняем...",
+    sending: "Отправляем...",
+    modal_consult: "Консультация с мастером",
+    consult_desc: "Желаете перейти в WhatsApp для личной консультации с мастером?",
+    success_toast: "Заявка успешно принята!",
+    empty_printers: "Принтеров пока нет. Добавьте первый принтер, чтобы создать заявку.",
+    unknown_model: "Модель не указана",
+    cartridge_label: "Картридж",
+    cartridge_missing: "Картридж не указан",
+    model_required: "Введите модель принтера.",
+    choose_printer: "Выберите хотя бы один принтер.",
+    submit_error: "Не удалось отправить заявку. Попробуйте позже.",
+    add_printer_error: "Не удалось добавить принтер. Попробуйте позже.",
+    time_1: "Сегодня до 12:00",
+    time_2: "Сегодня 12:00 - 15:00",
+    time_3: "Сегодня 15:00 - 18:00",
+    time_4: "Завтра до 12:00",
+    time_5: "Завтра 12:00 - 15:00",
+    time_6: "Завтра 15:00 - 18:00",
+    time_7: "В течение дня",
+    time_8: "Указать свое время"
+  },
+  kk: {
+    page_title: "Принтерге қызмет көрсетуге өтінім",
+    request_form_label: "Техникалық қызмет",
+    request_form_note: "Техниканы және қажетті қызметті таңдаңыз. Өтінім бірден сервиске түседі.",
+    greeting_title: "Сәлемдесу",
+    greeting_default: "Сәлеметсіз бе!",
+    greeting: "Сәлеметсіз бе",
+    client: "клиент",
+    office_schedule: "Кеңсе және жұмыс кестесі",
+    office_time: "Күнделікті",
+    office_address: "Бөгенбай батыр 23, 2-қабат, 1-3 кабинет",
+    hero_title: "Картридждерді толтыру қызметі",
+    hero_slogan: "Уайымсыз толтыру",
+    hero_subtitle: "Келеміз, картриджді ауыстырамыз, сіз жұмысыңызды жалғастырасыз.",
+    benefit_1: "Өтінім берілген күні<br>жылдам шығу",
+    benefit_2: "Картриджді<br>3-5 минутта ауыстыру",
+    benefit_3: "Ауыстыру қоры<br>әрдайым бар",
+    benefit_4: "Барлық қызметке<br>сапа кепілдігі",
+    how_we_work: "Бұл қалай жұмыс істейді",
+    step_1: "Өтінім",
+    step_1_desc: "Техниканы және қызметті таңдаңыз.",
+    step_2: "Растау",
+    step_2_desc: "Өтінімді қабылдап, сізбен хабарласамыз.",
+    step_3: "Қызмет көрсету",
+    step_3_desc: "Маман ыңғайлы уақытта жұмысты орындайды.",
+    step_4: "4. Жұмыс",
+    step_4_desc: "Сіз басып шығаруды жалғастырасыз",
+    loading_client: "Клиент деректері жүктелуде...",
+    load_error: "Деректерді жүктеу мүмкін болмады. Телефон нөмірі бар сілтемені тексеріңіз.",
+    last_request: "Соңғы өтінім",
+    no_info: "Ақпарат жоқ",
+    no_requests: "Әзірге өтінім жоқ",
+    request: "Өтінім",
+    time_not_set: "Уақыт көрсетілмеген",
+    leave_request: "Өтінім қалдыру",
+    step1_title: "Принтерді таңдаңыз",
+    step2_title: "Қызметті таңдаңыз",
+    service_refill: "Картриджді ауыстыру қажет",
+    service_repair: "Принтер бұзылды / жөндеу",
+    service_consult: "Кеңес алу",
+    add_printer: "Принтер қосу",
+    step3_title: "Түсініктеме",
+    comment_placeholder: "Мәселені, ыңғайлы кіру жолын немесе қосымша мәліметтерді сипаттаңыз",
+    step4_title: "Шығуға ыңғайлы уақыт",
+    custom_time_placeholder: "Мысалы: 17:00-ден кейін немесе ертең 14:30-ға",
+    send_request: "Заявка жіберу",
+    modal_add_printer: "Принтер қосу",
+    printer_model_placeholder: "Принтер моделі, мысалы Canon LBP6030",
+    cartridge_placeholder: "Картридж нөмірі, мысалы CF259A",
+    location_placeholder: "Кабинет немесе мекенжай, мысалы каб. 104",
+    cancel: "Болдырмау",
+    save: "Сақтау",
+    saving: "Сақталуда...",
+    sending: "Жіберілуде...",
+    modal_consult: "Маманнан кеңес алу",
+    consult_desc: "Маманмен жеке кеңесу үшін WhatsApp-қа өтесіз бе?",
+    success_toast: "Өтінім сәтті қабылданды!",
+    empty_printers: "Әзірге принтер жоқ. Өтінім жасау үшін бірінші принтерді қосыңыз.",
+    unknown_model: "Модель көрсетілмеген",
+    cartridge_label: "Картридж",
+    cartridge_missing: "Картридж көрсетілмеген",
+    model_required: "Принтер моделін енгізіңіз.",
+    choose_printer: "Кемінде бір принтерді таңдаңыз.",
+    submit_error: "Өтінімді жіберу мүмкін болмады. Кейінірек қайталап көріңіз.",
+    add_printer_error: "Принтерді қосу мүмкін болмады. Кейінірек қайталап көріңіз.",
+    time_1: "Бүгін 12:00-ге дейін",
+    time_2: "Бүгін 12:00 - 15:00",
+    time_3: "Бүгін 15:00 - 18:00",
+    time_4: "Ертең 12:00-ге дейін",
+    time_5: "Ертең 12:00 - 15:00",
+    time_6: "Ертең 15:00 - 18:00",
+    time_7: "Күн ішінде",
+    time_8: "Өз уақытыңызды көрсету"
+  }
+};
+
+function getSavedLang() {
+  return localStorage.getItem("site_lang") || "ru";
+}
+
+function t(key, fallback = "") {
+  const lang = getSavedLang();
+  return translations?.[lang]?.[key] || fallbackTranslations?.[lang]?.[key] || fallbackTranslations.ru[key] || fallback || key;
+}
+
+async function loadTranslations() {
+  translations = fallbackTranslations;
+}
+
+function setLang(lang) {
+  localStorage.setItem("site_lang", lang);
+  updateLangUI(lang);
+  document.dispatchEvent(new CustomEvent("languagechange", { detail: { lang } }));
+}
+
+function updateLangUI(lang = getSavedLang()) {
+  const dict = translations[lang] || fallbackTranslations[lang] || fallbackTranslations.ru;
+  document.documentElement.lang = lang === "kk" ? "kk" : "ru";
+
+  if (dict.page_title) {
+    document.title = dict.page_title;
+  }
+
+  document.querySelectorAll("[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key]) el.innerHTML = dict[key];
+  });
+
+  document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-placeholder");
+    if (dict[key]) el.setAttribute("placeholder", dict[key]);
+  });
+
+  document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-aria");
+    if (dict[key]) el.setAttribute("aria-label", dict[key]);
+  });
+
+  document.querySelectorAll("option[data-i18n]").forEach((el) => {
+    const key = el.getAttribute("data-i18n");
+    if (dict[key]) el.textContent = dict[key];
+  });
+
+  document.querySelectorAll("[data-lang]").forEach((el) => {
+    el.classList.toggle("active", el.getAttribute("data-lang") === lang);
+  });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+  await loadTranslations();
+  const lang = getSavedLang();
+  updateLangUI(lang);
+  document.dispatchEvent(new CustomEvent("languagechange", { detail: { lang } }));
+});
+
+window.setLang = setLang;
+window.t = t;
+
+  </script>
+  <script>
+const SUPABASE_BASE_URL = "https://wxkqfkjaretsqzdfnzhw.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind4a3Fma2phcmV0c3F6ZGZuemh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3MDM1NTMsImV4cCI6MjA5OTI3OTU1M30.7ztRTIZM9ytG9LLCFE5pvVTEpV9re5IrxIomMrJxVKw";
+const TELEGRAM_BOT_TOKEN = "8998606162:AAE_prALU6AkZqWQ_bQV4mjXNqaji1Uw-rk";
+const TELEGRAM_CHAT_ID = "-1003811452631";
+
+let clientPhone = "";
+let clientData = null;
+let clientPrinters = [];
+let qrPrinterId = "";
+let generatedStickerUrl = "";
+let generatedStickerPrinterId = "";
+
+let supabaseClient = window.supabase
+  ? window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY)
+  : null;
+
+const normalizePhone = (value) => String(value || "").trim();
+const uiText = (key, fallback = "") => (typeof window.t === "function" ? window.t(key, fallback) : fallback || key);
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function setBusy(button, isBusy, busyText, idleText) {
+  if (!button) return;
+  button.disabled = isBusy;
+  button.textContent = isBusy ? busyText : idleText;
+}
+
+function showSuccess(message) {
+  const toast = document.getElementById("successToast");
+  if (!toast) {
+    alert(message);
+    return;
+  }
+
+  toast.textContent = message;
+  toast.classList.remove("hidden");
+  window.setTimeout(() => toast.classList.add("hidden"), 3200);
+}
+
+async function requestRest(path, options = {}) {
+  return fetch(`${SUPABASE_BASE_URL}/rest/v1/${path}`, {
+    ...options,
+    headers: {
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+      "Content-Type": "application/json",
+      ...(options.headers || {})
+    }
+  });
+}
+
+async function sendTelegramRequest({ selectedPrinters, serviceType, visitTime, comment }) {
+  const address = selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.location_note
+    || selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.address
+    || selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.street
+    || clientData?.address
+    || clientData?.street
+    || "Не указан";
+  const printerLines = selectedPrinters
+    .map((printer) => `• ${escapeHtml(printer.model || "Модель не указана")} — Картридж: ${escapeHtml(printer.cartridge_number || "Не указан")} (${escapeHtml(printer.id)})`)
+    .join("\n");
+
+  const text = [
+    "🔴 <b>НОВАЯ ЗАЯВКА НА ОБСЛУЖИВАНИЕ</b>",
+    "",
+    "👤 <b>Данные клиента:</b>",
+    `• Клиент: ${escapeHtml(clientData?.name || "Не указан")}`,
+    `• Телефон: ${escapeHtml(clientPhone)}`,
+    `• Адрес: ${escapeHtml(address)}`,
+    `• Услуга: ${escapeHtml(serviceType)}`,
+    `• Комментарий: ${escapeHtml(comment || "Без комментария")}`,
+    "",
+    "🪛 <b>Выбранные принтеры:</b>",
+    printerLines,
+    "",
+    "⏰ <b>Желаемое время визита:</b>",
+    `${escapeHtml(visitTime)}`
+  ].join("\n");
+
+  const response = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: TELEGRAM_CHAT_ID,
+      text,
+      parse_mode: "HTML"
+    })
+  });
+
+  console.log("Telegram API status:", response.status);
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Telegram API error ${response.status}: ${errorText}`);
+  }
+}
+
+async function sendEmailNotification({ selectedPrinters, serviceType, visitTime, comment }) {
+  try {
+    const BREVO_API_KEY = "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";
+    const EMAIL_RECIPIENT = "vaire.print@mail.ru";
+    
+    const clientName = clientData?.name || "Не указан";
+    const address = selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.location_note
+      || selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.address
+      || selectedPrinters.find((printer) => printer.location_note || printer.address || printer.street)?.street
+      || clientData?.address
+      || clientData?.street
+      || "Не указан";
+
+    const printerLines = selectedPrinters
+      .map((printer) => `<li>${escapeHtml(printer.model || "Модель не указана")} | Картридж: ${escapeHtml(printer.cartridge_number || "Не указан")} (ID: ${escapeHtml(printer.id)})</li>`)
+      .join("");
+
+    const subject = `🔴 НОВАЯ ЗАЯВКА | ${serviceType} | ${clientName}`;
+    
+    const htmlContent = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 12px; background-color: #f8fafc;">
+        <h2 style="color: #1e3a8a; margin-top: 0;">🛠 Новая заявка на обслуживание</h2>
+        <div style="background-color: #ffffff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="margin-top: 0; color: #334155;">👤 Данные клиента</h3>
+          <p style="margin: 5px 0;"><b>Клиент / Компания:</b> ${clientName}</p>
+          <p style="margin: 5px 0;"><b>Телефон:</b> ${clientPhone}</p>
+          <p style="margin: 5px 0;"><b>Адрес / Кабинет:</b> ${address}</p>
+          <p style="margin: 5px 0;"><b>Выбранная услуга:</b> <strong style="color: #2563eb;">${serviceType}</strong></p>
+          <p style="margin: 5px 0;"><b>Комментарий:</b> ${comment || "Без комментария"}</p>
+        </div>
+        
+        <div style="background-color: #ffffff; padding: 15px; border-radius: 8px; margin-bottom: 20px;">
+          <h3 style="margin-top: 0; color: #334155;">🪛 Выбранные принтеры</h3>
+          <ul style="margin: 0; padding-left: 20px;">
+            ${printerLines}
+          </ul>
+        </div>
+        
+        <div style="background-color: #eff6ff; border-left: 4px solid #2563eb; padding: 15px; border-radius: 4px;">
+          <strong style="color: #1e3a8a; font-size: 16px;">⏰ Желаемое время визита:</strong> 
+          <span style="font-size: 16px; font-weight: bold;">${visitTime}</span>
+        </div>
+      </div>
+    `;
+
+    const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "api-key": BREVO_API_KEY
+      },
+      body: JSON.stringify({
+        sender: { name: "VAIRE Service", email: "nikitastrumpro@gmail.com" },
+        to: [{ email: EMAIL_RECIPIENT }],
+        subject: subject,
+        htmlContent: htmlContent
+      })
+    });
+
+    if (!response.ok) {
+      console.error("Brevo API error:", await response.text());
+    } else {
+      console.log("Email sent successfully via Brevo");
+    }
+  } catch (error) {
+    console.error("Failed to send email notification:", error);
+  }
+}
+
+async function generatePrinterId() {
+  if (!supabaseClient && window.supabase) {
+    supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+  }
+  if (!supabaseClient) return "PR-" + Math.floor(1000 + Math.random() * 9000);
+
+  try {
+    const { data, error } = await supabaseClient
+      .from("printers")
+      .select("id")
+      .ilike("id", "PR-%");
+    
+    if (error) throw error;
+    
+    if (!data || data.length === 0) {
+      return "PR-0001";
+    }
+    
+    let maxNum = 0;
+    for (const row of data) {
+      const match = row.id.match(/^PR-(\d+)$/i);
+      if (match) {
+        const num = parseInt(match[1], 10);
+        if (num > maxNum) maxNum = num;
+      }
+    }
+    
+    const nextNum = maxNum + 1;
+    return "PR-" + String(nextNum).padStart(4, "0");
+  } catch (err) {
+    console.error("Error generating sequential ID:", err);
+    return "PR-" + Math.floor(1000 + Math.random() * 9000);
+  }
+}
+
+// generator.html: admin/master QR generation.
+const orderForm = document.getElementById("orderForm");
+if (orderForm) {
+  orderForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById("nameInput")?.value.trim() || "";
+    const phone = normalizePhone(document.getElementById("phoneInput")?.value);
+    const model = document.getElementById("modelInput")?.value.trim() || "";
+    const cartridge = document.getElementById("cartridgeNumber")?.value.trim() || "Не указан";
+    const address = document.getElementById("addressInput")?.value.trim() || "";
+    const submitBtn = orderForm.querySelector('button[type="submit"]');
+
+    if (!name || !phone || !model || !address) {
+      alert("Заполните имя, телефон, модель принтера и адрес.");
+      return;
+    }
+
+    setBusy(submitBtn, true, "Сохраняем...", "Сгенерировать и отправить в базу");
+
+    try {
+      if (!supabaseClient && window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+      }
+
+      if (!supabaseClient) throw new Error("Supabase client not initialized");
+
+      // Upsert client on_conflict=phone
+      const { error: clientError } = await supabaseClient
+        .from("clients")
+        .upsert({ name, phone, address }, { onConflict: "phone" });
+
+      if (clientError) throw clientError;
+
+      const printerId = await generatePrinterId();
+
+      // Insert printer using both old and new schema fields
+      const { error: printerError } = await supabaseClient
+        .from("printers")
+        .insert({
+          id: printerId,
+          name: printerId,
+          phone: phone,
+          client_phone: phone,
+          cartridge_number: cartridge,
+          location_note: address,
+          address: address,
+          model: model,
+          status: "Новый"
+        });
+
+      if (printerError) throw printerError;
+
+      const baseUrl = window.location.href.replace(/[^/]*$/, "").replace(/\/$/, "");
+      const fullUrl = `${baseUrl}/index.html?phone=${encodeURIComponent(phone)}&printer_id=${encodeURIComponent(printerId)}`;
+      const qrContainer = document.getElementById("qrcode");
+      const qrResult = document.getElementById("qrResult");
+      const qrUrl = document.getElementById("qrUrl");
+      const qrPrinterId = document.getElementById("qrPrinterId");
+
+      if (qrContainer) {
+        qrContainer.innerHTML = "";
+        new QRCode(qrContainer, { text: fullUrl, width: 200, height: 200 });
+      }
+
+      generatedStickerUrl = fullUrl;
+      generatedStickerPrinterId = printerId;
+
+      if (qrPrinterId) qrPrinterId.textContent = `ID: ${printerId}`;
+      if (qrUrl) qrUrl.innerHTML = `<a href="${fullUrl}" target="_blank" rel="noopener">${fullUrl}</a>`;
+      if (qrResult) qrResult.classList.remove("hidden");
+      qrResult?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+
+      if (typeof loadPrintersWithHistory === "function") {
+        await loadPrintersWithHistory();
+      }
+    } catch (error) {
+      console.error("Ошибка генерации QR:", error);
+      alert("Не удалось сохранить клиента или принтер. Проверьте настройки Supabase.");
+    } finally {
+      setBusy(submitBtn, false, "Сохраняем...", "Сгенерировать и отправить в базу");
+    }
+  });
+}
+
+function prepareAndPrintSticker(printerId, url) {
+  const stickerQr = document.getElementById("stickerQr");
+  const stickerInventory = document.getElementById("stickerInventory");
+
+  if (!stickerQr || !stickerInventory) {
+    console.error("Элементы макета наклейки не найдены в DOM");
+    return;
+  }
+
+  stickerQr.innerHTML = "";
+  stickerInventory.textContent = printerId;
+  new QRCode(stickerQr, {
+    text: url,
+    width: 190,
+    height: 190
+  });
+
+  // Задержка перед печатью для генерации QR-кода
+  window.setTimeout(() => window.print(), 150);
+}
+
+const printStickerBtn = document.getElementById("printStickerBtn");
+if (printStickerBtn) {
+  printStickerBtn.addEventListener("click", () => {
+    if (!generatedStickerUrl || !generatedStickerPrinterId) {
+      alert("Сначала сгенерируйте QR-код.");
+      return;
+    }
+    prepareAndPrintSticker(generatedStickerPrinterId, generatedStickerUrl);
+  });
+}
+
+// generator.html: quick maintenance history update.
+const saveServiceBtn = document.getElementById("saveServiceBtn");
+if (saveServiceBtn) {
+  saveServiceBtn.addEventListener("click", async () => {
+    const printerId = document.getElementById("updatePrinterId")?.value.trim();
+    const serviceText = document.getElementById("updateServiceText")?.value.trim();
+
+    if (!printerId || !serviceText) {
+      alert("Введите ID принтера и описание проведенных работ.");
+      return;
+    }
+
+    setBusy(saveServiceBtn, true, "Сохраняем...", "Сохранить обслуживание");
+
+    try {
+      if (!supabaseClient && window.supabase) {
+        supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+      }
+
+      if (!supabaseClient) throw new Error("Supabase client not initialized");
+
+      // Insert into service_history instead of patching printers
+      const { error: serviceError } = await supabaseClient
+        .from("service_history")
+        .insert({
+          printer_id: printerId,
+          service_type: "Обслуживание",
+          problem_description: serviceText,
+          visit_time: new Date().toLocaleString("ru-RU"),
+          comment: "",
+          phone: ""
+        });
+
+      if (serviceError) throw serviceError;
+
+      const serviceInput = document.getElementById("updateServiceText");
+      if (serviceInput) serviceInput.value = "";
+      alert("История обслуживания успешно добавлена!");
+
+      if (typeof loadPrintersWithHistory === "function") {
+        await loadPrintersWithHistory();
+      }
+      if (typeof loadSelectedPrinterHistory === "function") {
+        await loadSelectedPrinterHistory(printerId);
+      }
+    } catch (error) {
+      console.error("Ошибка обновления обслуживания:", error);
+      alert("Не удалось сохранить историю обслуживания. Попробуйте позже.");
+    } finally {
+      setBusy(saveServiceBtn, false, "Сохраняем...", "Сохранить обслуживание");
+    }
+  });
+}
+
+function openModal() {
+  const modal = document.getElementById("addPrinterModal");
+  const input = document.getElementById("newPrinterModel");
+  if (!modal) return;
+  modal.classList.remove("hidden");
+  modal.setAttribute("aria-hidden", "false");
+  setTimeout(() => input?.focus(), 0);
+}
+
+function closeModal() {
+  const modal = document.getElementById("addPrinterModal");
+  if (!modal) return;
+
+  modal.classList.add("hidden");
+  modal.setAttribute("aria-hidden", "true");
+
+  ["newPrinterModel", "newPrinterCartridge", "newPrinterLocation"].forEach((id) => {
+    const field = document.getElementById(id);
+    if (field) field.value = "";
+  });
+}
+
+function renderPrinters() {
+  const printerList = document.getElementById("printerList");
+  if (!printerList) return;
+
+  if (!clientPrinters.length) {
+    printerList.innerHTML = `<div class="empty-state">${uiText("empty_printers", "Принтеров пока нет. Добавьте первый принтер, чтобы создать заявку.")}</div>`;
+    return;
+  }
+
+  printerList.innerHTML = clientPrinters.map((printer) => {
+    const id = printer.id ?? "";
+    const model = printer.model || uiText("unknown_model", "Модель не указана");
+    const cartridge = printer.cartridge_number
+      ? `${uiText("cartridge_label", "Картридж")}: ${printer.cartridge_number}`
+      : uiText("cartridge_missing", "Картридж не указан");
+    const checked = String(id) === String(qrPrinterId) ? "checked" : "";
+
+    return `
+      <label class="printer-item">
+        <input type="checkbox" name="printerIds" value="${id}" ${checked}>
+        <span>
+          <span class="printer-name">${model}</span>
+          <span class="printer-meta">${cartridge}</span>
+        </span>
+      </label>
+    `;
+  }).join("");
+}
+
+async function resolvePhoneFromUrl() {
+  const params = new URLSearchParams(window.location.search);
+  clientPhone = normalizePhone(params.get("phone"));
+  qrPrinterId = normalizePhone(params.get("printer_id"));
+
+  if (clientPhone || !qrPrinterId) return;
+
+  const result = await supabaseClient
+    .from("printers")
+    .select("phone")
+    .eq("id", qrPrinterId)
+    .maybeSingle();
+
+  if (result.error) throw result.error;
+  clientPhone = normalizePhone(result.data?.phone);
+}
+
+async function loadClient() {
+  if (!supabaseClient) throw new Error("Supabase SDK is not loaded");
+
+  await resolvePhoneFromUrl();
+  if (!clientPhone) throw new Error("Phone is missing");
+
+  const clientResult = await supabaseClient
+    .from("clients")
+    .select("*")
+    .eq("phone", clientPhone)
+    .maybeSingle();
+
+  if (clientResult.error) throw clientResult.error;
+  clientData = clientResult.data || { phone: clientPhone, name: uiText("client", "клиент") };
+
+  const greeting = document.getElementById("clientGreeting");
+  if (greeting) greeting.textContent = `${uiText("greeting", "Здравствуйте")}, ${clientData.name || uiText("client", "клиент")}`;
+
+  await Promise.all([loadPrinters(), loadLastRequest()]);
+}
+
+async function loadPrinters() {
+  const result = await supabaseClient
+    .from("printers")
+    .select("*")
+    .eq("phone", clientPhone)
+    .order("created_at", { ascending: false });
+
+  if (result.error) throw result.error;
+  clientPrinters = result.data || [];
+  renderPrinters();
+}
+
+async function loadLastRequest() {
+  const result = await supabaseClient
+    .from("service_history")
+    .select("*")
+    .eq("phone", clientPhone)
+    .order("created_at", { ascending: false })
+    .limit(1);
+
+  if (result.error) throw result.error;
+
+  const status = document.getElementById("lastRequestStatus");
+  if (!status) return;
+
+  const lastRequest = result.data?.[0];
+  if (!lastRequest) {
+    status.textContent = uiText("no_requests", "Заявок пока нет");
+    return;
+  }
+
+  status.textContent = `${lastRequest.service_type || uiText("request", "Заявка")} · ${lastRequest.visit_time || uiText("time_not_set", "Время не указано")}`;
+}
+
+async function addPrinter() {
+  const modelInput = document.getElementById("newPrinterModel");
+  const cartridgeInput = document.getElementById("newPrinterCartridge");
+  const locationInput = document.getElementById("newPrinterLocation");
+  const button = document.getElementById("savePrinterBtn");
+
+  const model = modelInput?.value.trim();
+  const cartridge = cartridgeInput?.value.trim() || null;
+  const location = locationInput?.value.trim() || null;
+
+  if (!model) {
+    alert(uiText("model_required", "Введите модель принтера."));
+    return;
+  }
+
+  setBusy(button, true, uiText("saving", "Сохраняем..."), uiText("save", "Сохранить"));
+
+  try {
+    const newId = await generatePrinterId();
+    const result = await supabaseClient
+      .from("printers")
+      .insert({
+        id: newId,
+        phone: clientPhone,
+        model,
+        cartridge_number: cartridge,
+        address: location,
+        location_note: location,
+        status: "Новый"
+      })
+      .select()
+      .single();
+
+    if (result.error) throw result.error;
+
+    qrPrinterId = result.data.id;
+    await loadPrinters();
+    closeModal();
+  } catch (error) {
+    console.error("Ошибка добавления принтера:", error);
+    alert(uiText("add_printer_error", "Не удалось добавить принтер. Попробуйте позже."));
+  } finally {
+    setBusy(button, false, uiText("saving", "Сохраняем..."), uiText("save", "Сохранить"));
+  }
+}
+
+async function submitClientRequest(event) {
+  event.preventDefault();
+
+  const button = document.getElementById("submitRequestBtn");
+  const checkedPrinters = Array.from(document.querySelectorAll('input[name="printerIds"]:checked'));
+  const checkedServices = Array.from(document.querySelectorAll('input[name="serviceType"]:checked'));
+  const serviceType = checkedServices.length > 0 
+      ? checkedServices.map(input => input.value).join(", ") 
+      : "Замена картриджа";
+  const selectedVisitTime = document.getElementById("visitTimeSelect")?.value || "В течение дня";
+  const customVisitTime = document.getElementById("customVisitTimeInput")?.value.trim() || "";
+  const visitTime = selectedVisitTime === "custom" ? (customVisitTime || "Не указано") : selectedVisitTime;
+  const comment = document.getElementById("commentInput")?.value.trim() || "";
+
+  if (!checkedPrinters.length && !serviceType.includes("Консультация")) {
+    alert(uiText("choose_printer", "Выберите хотя бы один принтер."));
+    return;
+  }
+
+  if (serviceType.includes("Консультация") && checkedServices.length === 1) {
+    const consultModal = document.getElementById("consultModal");
+    if (consultModal) {
+      consultModal.classList.remove("hidden");
+      consultModal.setAttribute("aria-hidden", "false");
+    }
+    return;
+  }
+
+  const selectedIds = new Set(checkedPrinters.map((item) => String(item.value)));
+  const selectedPrinters = clientPrinters.filter((printer) => selectedIds.has(String(printer.id)));
+
+  const rows = selectedPrinters.map((printer) => ({
+    printer_id: printer.id,
+    phone: clientPhone,
+    service_type: serviceType,
+    problem_description: comment || serviceType,
+    visit_time: visitTime,
+    comment
+  }));
+
+  setBusy(button, true, uiText("sending", "Отправляем..."), uiText("send_request", "Отправить заявку"));
+
+  try {
+    const historyResult = await supabaseClient
+      .from("service_history")
+      .insert(rows);
+
+    if (historyResult.error) throw historyResult.error;
+
+    const statusResult = await supabaseClient
+      .from("printers")
+      .update({ status: "Заявка отправлена" })
+      .in("id", Array.from(selectedIds));
+
+    if (statusResult.error) throw statusResult.error;
+
+    await sendTelegramRequest({ selectedPrinters, serviceType, visitTime, comment });
+    await sendEmailNotification({ selectedPrinters, serviceType, visitTime, comment });
+
+    document.getElementById("clientRequestForm")?.reset();
+    const customVisitTimeInput = document.getElementById("customVisitTimeInput");
+    if (customVisitTimeInput) {
+      customVisitTimeInput.value = "";
+      customVisitTimeInput.classList.add("hidden");
+    }
+    qrPrinterId = "";
+    await Promise.all([loadPrinters(), loadLastRequest()]);
+    showSuccess(uiText("success_toast", "Заявка успешно принята!"));
+  } catch (error) {
+    console.error("Ошибка отправки заявки:", error);
+    alert(uiText("submit_error", "Не удалось отправить заявку. Попробуйте позже."));
+  } finally {
+    setBusy(button, false, uiText("sending", "Отправляем..."), uiText("send_request", "Отправить заявку"));
+  }
+}
+
+async function initClientRequestApp() {
+  const app = document.getElementById("clientRequestApp");
+  if (!app) return;
+
+  const loading = document.getElementById("loadingState");
+  const error = document.getElementById("errorState");
+  const content = document.getElementById("mainContent");
+
+  document.getElementById("addPrinterBtn")?.addEventListener("click", openModal);
+  document.getElementById("closeModalBtn")?.addEventListener("click", closeModal);
+  
+  // Consult Modal Listeners
+  const consultModal = document.getElementById("consultModal");
+  document.getElementById("closeConsultModalBtn")?.addEventListener("click", () => {
+    if (consultModal) {
+      consultModal.classList.add("hidden");
+      consultModal.setAttribute("aria-hidden", "true");
+    }
+  });
+  document.getElementById("confirmConsultBtn")?.addEventListener("click", () => {
+    if (consultModal) {
+      consultModal.classList.add("hidden");
+      consultModal.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  document.getElementById("savePrinterBtn")?.addEventListener("click", addPrinter);
+  document.getElementById("clientRequestForm")?.addEventListener("submit", submitClientRequest);
+  document.getElementById("visitTimeSelect")?.addEventListener("change", (event) => {
+    const customInput = document.getElementById("customVisitTimeInput");
+    if (!customInput) return;
+    customInput.classList.toggle("hidden", event.target.value !== "custom");
+    if (event.target.value === "custom") customInput.focus();
+  });
+  document.getElementById("addPrinterModal")?.addEventListener("click", (event) => {
+    if (event.target.id === "addPrinterModal") closeModal();
+  });
+  document.addEventListener("languagechange", () => {
+    const greeting = document.getElementById("clientGreeting");
+    if (greeting && clientData) {
+      greeting.textContent = `${uiText("greeting", "Здравствуйте")}, ${clientData.name || uiText("client", "клиент")}`;
+    }
+    renderPrinters();
+    loadLastRequest().catch(() => {});
+  });
+
+  try {
+    await loadClient();
+    loading?.classList.add("hidden");
+    content?.classList.remove("hidden");
+  } catch (reason) {
+    console.error("Ошибка загрузки клиента:", reason);
+    loading?.classList.add("hidden");
+    error?.classList.remove("hidden");
+  }
+}
+
+let allDashboardPrinters = [];
+
+async function loadPrintersWithHistory() {
+  const loadingEl = document.getElementById("dbLoading");
+  const errorEl = document.getElementById("dbError");
+  const wrapperEl = document.getElementById("printerListWrapper");
+  const listEl = document.getElementById("dbPrinterList");
+
+  if (!listEl) return; // Not on generator page
+
+  loadingEl?.classList.remove("hidden");
+  errorEl?.classList.add("hidden");
+  wrapperEl?.classList.add("hidden");
+
+  try {
+    // Initialize supabaseClient if it wasn't initialized at startup
+    if (!supabaseClient && window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+    }
+
+    if (!supabaseClient) throw new Error("Supabase client not initialized");
+
+    // Relational Fetching: printers with nested service_history
+    const { data: printers, error: fetchError } = await supabaseClient
+      .from("printers")
+      .select("*, service_history(*)")
+      .order("created_at", { ascending: false })
+      .order("created_at", { foreignTable: "service_history", ascending: false });
+
+    if (fetchError) throw fetchError;
+
+    // Fetch clients to get responsible person names
+    const { data: clientsData } = await supabaseClient
+      .from("clients")
+      .select("phone, name");
+
+    const phoneToNameMap = {};
+    if (clientsData) {
+      clientsData.forEach(c => {
+        if (c.phone) phoneToNameMap[c.phone] = c.name;
+      });
+    }
+
+    allDashboardPrinters = printers || [];
+    allDashboardPrinters.forEach(p => {
+      p.client_name = phoneToNameMap[p.phone] || phoneToNameMap[p.client_phone] || "Не указано";
+    });
+
+    renderDashboardPrinters(allDashboardPrinters);
+    loadingEl?.classList.add("hidden");
+    wrapperEl?.classList.remove("hidden");
+  } catch (err) {
+    console.error("Ошибка загрузки принтеров и истории:", err);
+    loadingEl?.classList.add("hidden");
+    errorEl?.classList.remove("hidden");
+  }
+}
+
+function renderDashboardPrinters(printersList) {
+  const listEl = document.getElementById("dbPrinterList");
+  if (!listEl) return;
+
+  if (printersList.length === 0) {
+    listEl.innerHTML = `<div class="empty-state" style="text-align: center; padding: 20px; color: #64748B;">Принтеры не найдены</div>`;
+    return;
+  }
+
+  listEl.innerHTML = printersList.map(printer => {
+    // Fallbacks for compatibility: name is printer name, id is fallback
+    const name = printer.name || printer.id || "Не указан";
+    const model = printer.model || "Модель не указана";
+    const cartridge = printer.cartridge_number || "Не указан";
+    const location = printer.location_note || printer.address || "Не указан";
+    
+    // Format phones string
+    const phonesArray = [];
+    if (printer.phone) phonesArray.push(printer.phone);
+    if (printer.client_phone) phonesArray.push(printer.client_phone);
+    const phones = phonesArray.join(" / ") || "Не указаны";
+
+    const serviceHistory = printer.service_history || [];
+
+    // Format service history list
+    let historyListHtml = "";
+    if (serviceHistory.length > 0) {
+      historyListHtml = `
+        <div class="history-list">
+          ${serviceHistory.map(history => {
+            const time = history.visit_time || new Date(history.created_at).toLocaleString("ru-RU");
+            const type = history.service_type || "Обслуживание";
+            const desc = history.problem_description || "Описание отсутствует";
+            return `
+              <div class="history-item">
+                <div class="history-item-header">
+                  <span>${escapeHtml(time)}</span>
+                  <span style="color: #2563EB;">${escapeHtml(type)}</span>
+                  <button class="delete-history-btn delete-icon-btn" data-history-id="${history.id}" title="Удалить запись">🗑</button>
+                </div>
+                <div class="history-item-desc">${escapeHtml(desc)}</div>
+              </div>
+            `;
+          }).join("")}
+        </div>
+      `;
+    } else {
+      historyListHtml = `<div class="empty-history" style="color: #94A3B8; font-size: 12px; font-style: italic; padding: 4px 0;">История обслуживания отсутствует</div>`;
+    }
+
+    return `
+      <div class="db-card" data-printer-name="${escapeHtml(name)}">
+        <div class="db-card-header" style="display: flex; justify-content: space-between; align-items: center;">
+          <div>
+            <span class="badge">${escapeHtml(name)}</span>
+            <span class="db-card-model" style="font-size: 12px; color: #64748B; font-weight: normal; margin-left: 8px;">Всего обслуживаний: ${serviceHistory.length}</span>
+          </div>
+          <button class="delete-printer-btn delete-icon-btn" data-printer-id="${name}" title="Удалить клиента и принтер">🗑</button>
+        </div>
+        <div style="font-weight: 700; font-size: 14px; color: #1E293B; margin-bottom: 8px;">
+          ${escapeHtml(model)}
+        </div>
+        <div class="db-meta-row">
+          <span class="meta-label">Телефоны:</span>
+          <span class="meta-value text-bold">${escapeHtml(phones)}</span>
+        </div>
+        <div class="db-meta-row">
+          <span class="meta-label">Имя (Отв.):</span>
+          <span class="meta-value">${escapeHtml(printer.client_name || "Не указано")}</span>
+        </div>
+        <div class="db-meta-row">
+          <span class="meta-label">Картридж:</span>
+          <span class="meta-value">${escapeHtml(cartridge)}</span>
+        </div>
+        <div class="db-meta-row">
+          <span class="meta-label">Локация:</span>
+          <span class="meta-value">${escapeHtml(location)}</span>
+        </div>
+        <div class="history-box">
+          <h4>История обслуживания:</h4>
+          ${historyListHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // Add click event listeners
+  const cards = listEl.querySelectorAll(".db-card");
+  cards.forEach(card => {
+    // Delete history record
+    const deleteHistoryBtns = card.querySelectorAll(".delete-history-btn");
+    deleteHistoryBtns.forEach(btn => {
+      btn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (confirm('Удалить эту запись из истории?')) {
+          const historyId = btn.getAttribute("data-history-id");
+          try {
+            const { error } = await supabaseClient.from('service_history').delete().eq('id', historyId);
+            if (error) throw error;
+            await loadPrintersWithHistory();
+            if (typeof loadSelectedPrinterHistory === "function") {
+               const updateIdInput = document.getElementById("updatePrinterId");
+               if (updateIdInput && updateIdInput.value) {
+                 loadSelectedPrinterHistory(updateIdInput.value);
+               }
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Ошибка при удалении записи");
+          }
+        }
+      });
+    });
+
+    // Delete printer and client
+    const deletePrinterBtn = card.querySelector(".delete-printer-btn");
+    if (deletePrinterBtn) {
+      deletePrinterBtn.addEventListener("click", async (e) => {
+        e.stopPropagation();
+        if (confirm('Вы уверены, что хотите полностью удалить этот принтер и всю его историю?')) {
+          const printerId = deletePrinterBtn.getAttribute("data-printer-id");
+          try {
+            // Delete associated history first
+            await supabaseClient.from('service_history').delete().eq('printer_id', printerId);
+            // Delete the printer itself (we delete by name since ID and name are used interchangeably for identifying codes)
+            const { error } = await supabaseClient.from('printers').delete().or(`id.eq.${printerId},name.eq.${printerId}`);
+            if (error) throw error;
+            
+            // Remove from local list and UI without full page reload
+            allDashboardPrinters = allDashboardPrinters.filter(p => p.name !== printerId && p.id !== printerId);
+            card.remove();
+            
+            if (typeof loadSelectedPrinterHistory === "function") {
+               const updateIdInput = document.getElementById("updatePrinterId");
+               if (updateIdInput && updateIdInput.value === printerId) {
+                 updateIdInput.value = "";
+                 loadSelectedPrinterHistory("");
+               }
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Ошибка при удалении принтера");
+          }
+        }
+      });
+    }
+
+    card.addEventListener("click", (e) => {
+      // Prevent selection if user is clicking or scrolling inside the history-list scroll box or clicking buttons
+      if (e.target.closest(".history-list") || e.target.closest("button")) {
+        return;
+      }
+      
+      const name = card.getAttribute("data-printer-name");
+      const updateIdInput = document.getElementById("updatePrinterId");
+      if (updateIdInput) {
+        updateIdInput.value = name;
+        updateIdInput.focus();
+        
+        // Load history for the selected printer in the left column
+        if (typeof loadSelectedPrinterHistory === "function") {
+          loadSelectedPrinterHistory(name);
+        }
+        
+        // Visual indicator that it was selected
+        card.style.backgroundColor = "#EFF6FF";
+        card.style.borderColor = "#2563EB";
+        setTimeout(() => {
+          card.style.backgroundColor = "";
+          card.style.borderColor = "";
+        }, 300);
+      }
+    });
+  });
+}
+
+function initDashboardSearch() {
+  const searchInput = document.getElementById("dbSearchInput");
+  if (!searchInput) return;
+
+  searchInput.addEventListener("input", (e) => {
+    const query = e.target.value.toLowerCase().trim();
+    if (!query) {
+      renderDashboardPrinters(allDashboardPrinters);
+      return;
+    }
+
+    const filtered = allDashboardPrinters.filter(printer => {
+      const name = (printer.name || printer.id || "").toLowerCase();
+      const phone = (printer.phone || "").toLowerCase();
+      const clientPhone = (printer.client_phone || "").toLowerCase();
+      const cartridge = (printer.cartridge_number || "").toLowerCase();
+      const location = (printer.location_note || printer.address || "").toLowerCase();
+      const clientName = (printer.client_name || "").toLowerCase();
+      
+      return name.includes(query) || 
+             phone.includes(query) || 
+             clientPhone.includes(query) || 
+             cartridge.includes(query) || 
+             location.includes(query) ||
+             clientName.includes(query);
+    });
+
+    renderDashboardPrinters(filtered);
+  });
+}
+
+async function loadSelectedPrinterHistory(printerId) {
+  const container = document.getElementById("selectedPrinterHistory");
+  const listEl = document.getElementById("selectedPrinterHistoryList");
+  if (!container || !listEl) return;
+
+  if (!printerId) {
+    container.classList.add("hidden");
+    listEl.innerHTML = "";
+    return;
+  }
+
+  container.classList.remove("hidden");
+  listEl.innerHTML = `<div style="font-size: 12px; color: #64748B; font-style: italic; padding: 4px 0;">Загрузка истории...</div>`;
+
+  try {
+    if (!supabaseClient && window.supabase) {
+      supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+    }
+    if (!supabaseClient) throw new Error("Supabase client not initialized");
+
+    // Fetch from service_history for this printer_id
+    const { data, error } = await supabaseClient
+      .from("service_history")
+      .select("*")
+      .eq("printer_id", printerId)
+      .order("created_at", { ascending: false });
+
+    if (error) throw error;
+
+    if (!data || data.length === 0) {
+      listEl.innerHTML = `<div style="font-size: 12px; color: #94A3B8; font-style: italic; padding: 4px 0;">История обслуживания отсутствует</div>`;
+      return;
+    }
+
+    listEl.innerHTML = data.map(item => {
+      const time = item.visit_time || new Date(item.created_at).toLocaleString("ru-RU");
+      const type = item.service_type || "Обслуживание";
+      const desc = item.problem_description || "Описание отсутствует";
+      return `
+        <div class="history-item">
+          <div class="history-item-header">
+            <span>${escapeHtml(time)}</span>
+            <span style="color: #2563EB; font-weight: bold;">${escapeHtml(type)}</span>
+          </div>
+          <div class="history-item-desc">${escapeHtml(desc)}</div>
+        </div>
+      `;
+    }).join("");
+  } catch (err) {
+    console.error("Ошибка загрузки истории выбранного принтера:", err);
+    listEl.innerHTML = `<div style="font-size: 12px; color: #EF4444; padding: 4px 0;">Не удалось загрузить историю</div>`;
+  }
+}
+
+async function initGeneratorApp() {
+  const dashboard = document.getElementById("printerDashboard");
+  if (!dashboard) return; // Not on generator page
+
+  const updatePrinterIdInput = document.getElementById("updatePrinterId");
+  if (updatePrinterIdInput) {
+    updatePrinterIdInput.addEventListener("input", () => {
+      const val = updatePrinterIdInput.value.trim();
+      loadSelectedPrinterHistory(val);
+    });
+  }
+
+  initDashboardSearch();
+  await loadPrintersWithHistory();
+}
+
+async function initQrApp() {
+  const form = document.getElementById("qrClientForm");
+  if (!form) return;
+
+  // Listen for service selection to update hidden input
+  document.querySelectorAll(".qr-service-text").forEach(el => {
+    el.addEventListener("click", (e) => {
+      const text = el.textContent.trim();
+      if (text === "Консультация") {
+        e.preventDefault();
+        window.open("https://wa.me/77028054237?text=Здравствуйте!%20Мне%20нужна%20консультация%20по%20оргтехнике.", "_blank");
+        return;
+      }
+      const hiddenInput = document.getElementById("qrSelectedService");
+      if (hiddenInput) {
+        hiddenInput.value = text;
+      }
+    });
+  });
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const btn = document.getElementById("qrSubmitBtn");
+    
+    const name = document.getElementById("qrName")?.value.trim();
+    const phone = document.getElementById("qrPhone")?.value.trim();
+    const address = document.getElementById("qrAddress")?.value.trim();
+    const serviceType = document.getElementById("qrSelectedService")?.value.trim() || "Заправка картриджа";
+    const visitTime = document.getElementById("qrTime")?.value.trim() || "В течение дня";
+    const comment = document.getElementById("qrComment")?.value.trim() || "";
+    
+    // Parse optional printer ID from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlPrinterId = urlParams.get("printer_id") || "С наклейки";
+
+    setBusy(btn, true, "Отправляем...", "Вызвать мастера");
+
+    // Temporarily overwrite globals used by Telegram and Email functions
+    clientData = { name: name, address: address };
+    clientPhone = phone;
+    
+    const selectedPrinters = [{
+      id: urlPrinterId,
+      model: "Принтер не указан",
+      location_note: address
+    }];
+
+    try {
+      await sendTelegramRequest({ selectedPrinters, serviceType, visitTime, comment });
+      await sendEmailNotification({ selectedPrinters, serviceType, visitTime, comment });
+
+      // Record in Supabase (Service History) if possible
+      try {
+        if (!supabaseClient && window.supabase) {
+          supabaseClient = window.supabase.createClient(SUPABASE_BASE_URL, SUPABASE_ANON_KEY);
+        }
+        if (supabaseClient) {
+          await supabaseClient.from("service_history").insert({
+            printer_id: urlPrinterId,
+            phone: phone,
+            service_type: serviceType,
+            problem_description: comment || serviceType,
+            visit_time: visitTime,
+            comment: comment
+          });
+        }
+      } catch (sbError) {
+        console.warn("Supabase history insert failed:", sbError);
+      }
+
+      // Show success
+      document.getElementById("qrFormContainer").classList.add("hidden");
+      document.getElementById("successState").classList.remove("hidden");
+      form.reset();
+
+    } catch (err) {
+      console.error("QR Submit Error:", err);
+      alert("Ошибка отправки заявки. Попробуйте еще раз.");
+    } finally {
+      setBusy(btn, false, "Отправляем...", "Вызвать мастера");
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  initClientRequestApp();
+  initGeneratorApp();
+  initQrApp();
+});
+
+  </script>
+  <script>
+    (() => {
+      const themeKey = "vaire-service-theme";
+      const toggle = document.getElementById("themeToggle");
+      const header = document.querySelector(".site-header");
+      const applyTheme = (theme) => {
+        document.body.classList.toggle("theme-dark", theme === "dark");
+        if (toggle) {
+          toggle.setAttribute("aria-label", theme === "dark" ? "Включить светлую тему" : "Включить тёмную тему");
+          toggle.setAttribute("title", theme === "dark" ? "Светлая тема" : "Тёмная тема");
+        }
+      };
+      applyTheme(localStorage.getItem(themeKey) || "light");
+      toggle?.addEventListener("click", () => {
+        const nextTheme = document.body.classList.contains("theme-dark") ? "light" : "dark";
+        localStorage.setItem(themeKey, nextTheme);
+        applyTheme(nextTheme);
+      });
+      let lastScroll = window.scrollY;
+      window.addEventListener("scroll", () => {
+        const currentScroll = window.scrollY;
+        if (currentScroll > lastScroll + 6 && currentScroll > 70) header?.classList.add("header-hidden");
+        if (currentScroll < lastScroll - 6 || currentScroll < 20) header?.classList.remove("header-hidden");
+        lastScroll = currentScroll;
+      }, { passive: true });
+    })();
+  </script>
 </body>
 
 </html>
