@@ -622,17 +622,16 @@
     }
 
     #clientRequestApp > .top-banner-img { order: 1; }
+    #clientRequestApp > .topbar { order: 2; }
+    #clientRequestApp > .topbar + .topbar { order: 3; }
     #clientRequestApp > #loadingState,
-    #clientRequestApp > #errorState { order: 2; }
-    #clientRequestApp > #mainContent { order: 3; }
-    #clientRequestApp > .topbar { order: 4; }
-    #clientRequestApp > .topbar + .topbar { order: 5; }
+    #clientRequestApp > #errorState { order: 4; }
+    #clientRequestApp > #mainContent { order: 5; }
     #clientRequestApp > .hero-block { order: 6; }
     #clientRequestApp > .benefits-grid { order: 7; }
     #clientRequestApp > .benefits-grid + .hero-block { order: 8; }
 
     /* после формы оставляем только полезные сведения */
-    .hello span,
     .hero-slogan,
     .hero-subtitle,
     .benefit-icon,
